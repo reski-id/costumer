@@ -18,9 +18,9 @@ func SeedUsers() {
 
 	// create some users
 	users := []models.User{
-		{Username: "john_doe", Password: "password1", IsAdmin: false},
-		{Username: "jane_doe", Password: "password2", IsAdmin: true},
-		{Username: "bob_smith", Password: "password3", IsAdmin: false},
+		{Username: "john_doe", Password: "password1", IsAdmin: false, Email: "jhon@gmail.com", Name: "Jhon"},
+		{Username: "jane_doe", Password: "password2", IsAdmin: true, Email: "adm@gmail.com", Name: "Jhane"},
+		{Username: "bob_smith", Password: "password3", IsAdmin: false, Email: "bob@gmail.com", Name: "Bob"},
 	}
 
 	for i := range users {
@@ -53,5 +53,28 @@ func SeedCustomers() {
 			panic("Failed to insert customer!")
 		}
 	}
+}
 
+func SeedProducts() {
+	db, err := utils.Connect()
+	if err != nil {
+		panic("Failed to connect to database!")
+	}
+
+	// create some sample products
+	products := []models.Product{
+		{Name: "Dell XPS 13", Description: "13-inch laptop with 11th Gen Intel Core processor", Price: 1199.99, SKU: "LAPTOP-001", Quantity: 10, ImageURL: "https://example.com/laptop.jpg"},
+		{Name: "iPhone 13", Description: "6.1-inch smartphone with A15 Bionic chip and 5G connectivity", Price: 799.99, SKU: "PHONE-001", Quantity: 5, ImageURL: "https://example.com/phone.jpg"},
+		{Name: "Apple Watch Series 7", Description: "Smartwatch with always-on Retina display and ECG app", Price: 399.99, SKU: "WATCH-001", Quantity: 3, ImageURL: "https://example.com/watch.jpg"},
+		{Name: "AirPods Pro", Description: "Wireless earbuds with active noise cancellation", Price: 249.99, SKU: "EARBUDS-001", Quantity: 7, ImageURL: "https://example.com/earbuds.jpg"},
+		{Name: "Fitbit Charge 5", Description: "Advanced fitness tracker with EDA and ECG sensors", Price: 179.99, SKU: "FITNESS-001", Quantity: 2, ImageURL: "https://example.com/fitness.jpg"},
+	}
+
+	// insert products into the database
+	for _, p := range products {
+		result := db.Create(&p)
+		if result.Error != nil {
+			panic("Failed to insert product!")
+		}
+	}
 }

@@ -14,6 +14,7 @@ func main() {
 	seed.CreateMigration()
 	seed.SeedUsers()
 	seed.SeedCustomers()
+	seed.SeedProducts()
 
 	router := gin.Default()
 
