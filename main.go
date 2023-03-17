@@ -4,17 +4,16 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"costumer/controllers"
-	seed "costumer/seeder"
 	"costumer/utils"
 )
 
 func main() {
 
 	//migrate and seeder
-	seed.CreateMigration()
-	seed.SeedUsers()
-	seed.SeedCustomers()
-	seed.SeedProducts()
+	// seed.CreateMigration()
+	// seed.SeedUsers()
+	// seed.SeedCustomers()
+	// seed.SeedProducts()
 
 	router := gin.Default()
 
@@ -26,6 +25,7 @@ func main() {
 	v1 := router.Group("/api/v1")
 
 	v1.POST("/login", authController.Login)
+	v1.POST("/register", authController.Register)
 	v1.Use(utils.AdminAuthMiddleware())
 
 	v1.GET("/customers", customerController.GetCustomers)
@@ -33,6 +33,7 @@ func main() {
 	v1.POST("/customers", customerController.CreateCustomer)
 	v1.PUT("/customers/:id", customerController.UpdateCustomer)
 	v1.DELETE("/customers/:id", customerController.DeleteCustomer)
+
 	v1.GET("/orders", orderController.GetOrders)
 	v1.GET("/orders/:id", orderController.GetOrder)
 	v1.POST("/orders", orderController.CreateOrder)

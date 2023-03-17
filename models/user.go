@@ -8,11 +8,11 @@ import (
 
 type User struct {
 	gorm.Model
-	Name      string `gorm:"not null" json:"name"`
-	Username  string `json:"username" form:"username" validate:"required"`
-	Email     string `gorm:"not null;unique" json:"email"`
-	Password  string `gorm:"not null" json:"-"`
+	Name      string `json:"name" form:"name" binding:"required"`
+	Username  string `json:"username" form:"username" binding:"required"`
+	Password  string `json:"password" form:"password" binding:"required"`
+	Email     string `json:"email" form:"email" binding:"required"`
+	IsAdmin   bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	IsAdmin   bool `gorm:"not null" json:"is_admin"`
 }
