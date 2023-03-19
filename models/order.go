@@ -2,11 +2,10 @@ package models
 
 import (
 	"github.com/google/uuid"
-	"gorm.io/gorm"
 )
 
 type Order struct {
-	gorm.Model
+	Model
 	CustomerID uuid.UUID `json:"customerId" form:"customerId" validate:"required" gorm:"type:char(36);primary_key"`
 	Customer   Customer  `json:"customer" gorm:"foreignKey:CustomerID"  form:"customer"  validate:"required"`
 	Name       string    `json:"name" form:"name" validate:"required"`
