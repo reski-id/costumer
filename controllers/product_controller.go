@@ -14,12 +14,12 @@ type ProductController struct{}
 // CreateProduct godoc
 // @Summary Create a new product
 // @Description Create a new product
-// @Tags Product
+// @Tags Products
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "Bearer Token"
 // @Param product body models.Product true "Product information"
-// @Success 200 {object} models.ErrorResponse
+// @Success 200 {object} models.Product
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
@@ -60,6 +60,7 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 // GetProducts retrieves all products with pagination support
 // @Summary Get a list of products
 // @Description Get a list of products with pagination support
+// @Tags Products
 // @ID get-products
 // @Produce  json
 // @Param page query int false "Page number, default is 1"
@@ -101,6 +102,7 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 // @Description Retrieve a product using its unique identifier
 // @ID get-product-by-id
 // @Produce json
+// @Tags Products
 // @Param id path int true "Product ID"
 // @Success 200 {object} models.Product
 // @Failure 404 {object} models.ErrorResponse
