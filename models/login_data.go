@@ -6,3 +6,7 @@ type LoginData struct {
 	Password string `json:"password" form:"password" validate:"required"`
 	IsAdmin  bool   `gorm:"not null;default:false" json:"is_admin"`
 }
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}

@@ -1,10 +1,15 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-
 	"costumer/controllers"
 	"costumer/utils"
+
+	"github.com/gin-gonic/gin"
+
+	docs "costumer/docs"
+
+	swaggerfiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 func main() {
@@ -16,6 +21,10 @@ func main() {
 	// seed.SeedProducts()
 
 	router := gin.Default()
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	docs.SwaggerInfo.BasePath = "/api/v1"
 
 	customerController := controllers.CustomerController{}
 	orderController := controllers.OrderController{}

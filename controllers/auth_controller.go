@@ -12,6 +12,18 @@ import (
 
 type AuthController struct{}
 
+// Login godoc
+// @Summary Login to the system
+// @Description Login to the system with username and password
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param loginData body models.LoginData true "Login Data"
+// @Success 200 {string} string "Token"
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /auth/login [post]
 func (auth *AuthController) Login(c *gin.Context) {
 	var loginData models.LoginData
 	if err := c.ShouldBind(&loginData); err != nil {
@@ -21,7 +33,7 @@ func (auth *AuthController) Login(c *gin.Context) {
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Database connection error"})
 		return
 	}
 
@@ -39,22 +51,34 @@ func (auth *AuthController) Login(c *gin.Context) {
 
 	token, err := utils.GenerateToken(user.ID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token generation error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Token generation error"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
+
+// Register godoc
+// @Summary Register to the system
+// @Description Register to the system with username and password
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param registrationData body models.User true "Registration Data"
+// @Success 200 {string} string "Token"
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /auth/register [post]
 func (auth *AuthController) Register(c *gin.Context) {
 	var registrationData models.User
 	if err := c.ShouldBind(&registrationData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error 22": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Database connection error"})
 		return
 	}
 
@@ -67,20 +91,20 @@ func (auth *AuthController) Register(c *gin.Context) {
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(registrationData.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Password hashing error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Password hashing error"})
 		return
 	}
 
 	newUser := models.User{Username: registrationData.Username, Password: string(hash)}
 	result = db.Create(&newUser)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "User creation error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "User creation error"})
 		return
 	}
 
 	token, err := utils.GenerateToken(newUser.ID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token generation error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Token generation error"})
 		return
 	}
 
