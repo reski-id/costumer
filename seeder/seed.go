@@ -13,6 +13,13 @@ func SeedUsers() {
 		log.Fatalf("failed to connect database: %s", err.Error())
 	}
 
+	// check if any user already exists in the database
+	var user models.User
+	if db.First(&user).Error == nil {
+		log.Println("users already seeded")
+		return
+	}
+
 	// migrate the user table
 	db.AutoMigrate(&models.User{})
 
@@ -40,6 +47,13 @@ func SeedCustomers() {
 		panic("Failed to connect to database!")
 	}
 
+	// check if any customer already exists in the database
+	var customer models.Customer
+	if db.First(&customer).Error == nil {
+		log.Println("customers already seeded")
+		return
+	}
+
 	// create some sample customers
 	customers := []models.Customer{
 		{Name: "John Doe", Email: "john.doe@example.com", PhoneNumber: "1234567890", Address: "123 Main St"},
@@ -59,6 +73,13 @@ func SeedProducts() {
 	db, err := utils.Connect()
 	if err != nil {
 		panic("Failed to connect to database!")
+	}
+
+	// check if any customer already exists in the database
+	var product models.Product
+	if db.First(&product).Error == nil {
+		log.Println("products already seeded")
+		return
 	}
 
 	// create some sample products
