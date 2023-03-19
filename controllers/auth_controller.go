@@ -19,11 +19,11 @@ type AuthController struct{}
 // @Accept json
 // @Produce json
 // @Param loginData body models.LoginData true "Login Data"
-// @Success 200 {string} string "Token"
+// @Success 200 {object} models.TokenResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
-// @Router /auth/login [post]
+// @Router /login [post]
 func (auth *AuthController) Login(c *gin.Context) {
 	var loginData models.LoginData
 	if err := c.ShouldBind(&loginData); err != nil {
@@ -40,12 +40,12 @@ func (auth *AuthController) Login(c *gin.Context) {
 	var user models.User
 	result := db.Where("username = ?", loginData.Username).First(&user)
 	if result.Error != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid username or password"})
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginData.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid username or password"})
 		return
 	}
 
@@ -55,20 +55,27 @@ func (auth *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	response := models.TokenResponse{
+		Username: user.Username,
+		Email:    user.Email,
+		IsAdmin:  user.IsAdmin,
+		Token:    token,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // Register godoc
 // @Summary Register to the system
-// @Description Register to the system with username and password
+// @Description Register to the system with username, password, email, and isAdmin flag
 // @Tags Auth
 // @Accept json
 // @Produce json
 // @Param registrationData body models.User true "Registration Data"
-// @Success 200 {string} string "Token"
+// @Success 200 {object} models.TokenResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
-// @Router /auth/register [post]
+// @Router /register [post]
 func (auth *AuthController) Register(c *gin.Context) {
 	var registrationData models.User
 	if err := c.ShouldBind(&registrationData); err != nil {
@@ -95,7 +102,7 @@ func (auth *AuthController) Register(c *gin.Context) {
 		return
 	}
 
-	newUser := models.User{Username: registrationData.Username, Password: string(hash)}
+	newUser := models.User{Username: registrationData.Username, Password: string(hash), Email: registrationData.Email, IsAdmin: registrationData.IsAdmin}
 	result = db.Create(&newUser)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "User creation error"})
@@ -108,5 +115,5 @@ func (auth *AuthController) Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"token": token, "username": newUser.Username, "email": newUser.Email, "is_admin": newUser.IsAdmin})
 }

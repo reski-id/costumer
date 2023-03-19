@@ -29,8 +29,6 @@ definitions:
     properties:
       id:
         type: integer
-      is_admin:
-        type: boolean
       password:
         type: string
       username:
@@ -82,6 +80,17 @@ definitions:
       updatedAt:
         type: string
     type: object
+  models.TokenResponse:
+    properties:
+      email:
+        type: string
+      is_admin:
+        type: boolean
+      token:
+        type: string
+      username:
+        type: string
+    type: object
   models.User:
     properties:
       createdAt:
@@ -108,71 +117,10 @@ definitions:
     type: object
 info:
   contact: {}
+  description: This is a swagger documentation for Costumer APP.
+  title: Swagger Costumer APP
+  version: "2.0"
 paths:
-  /auth/login:
-    post:
-      consumes:
-      - application/json
-      description: Login to the system with username and password
-      parameters:
-      - description: Login Data
-        in: body
-        name: loginData
-        required: true
-        schema:
-          $ref: '#/definitions/models.LoginData'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Token
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-      summary: Login to the system
-      tags:
-      - Auth
-  /auth/register:
-    post:
-      consumes:
-      - application/json
-      description: Register to the system with username and password
-      parameters:
-      - description: Registration Data
-        in: body
-        name: registrationData
-        required: true
-        schema:
-          $ref: '#/definitions/models.User'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Token
-          schema:
-            type: string
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-      summary: Register to the system
-      tags:
-      - Auth
   /customers:
     get:
       consumes:
@@ -352,6 +300,40 @@ paths:
       summary: Search customers by name
       tags:
       - Customers
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login to the system with username and password
+      parameters:
+      - description: Login Data
+        in: body
+        name: loginData
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Login to the system
+      tags:
+      - Auth
   /orders:
     get:
       consumes:
@@ -556,7 +538,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ErrorResponse'
+            $ref: '#/definitions/models.Product'
         "400":
           description: Bad Request
           schema:
@@ -571,7 +553,7 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Create a new product
       tags:
-      - Product
+      - Products
   /products:
     get:
       description: Get a list of products with pagination support
@@ -597,6 +579,8 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Get a list of products
+      tags:
+      - Products
   /products/{id}:
     delete:
       description: Delete a product by ID
@@ -657,6 +641,8 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Get a product by ID
+      tags:
+      - Products
     put:
       consumes:
       - application/json
@@ -699,4 +685,35 @@ paths:
       summary: Update a product
       tags:
       - Products
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register to the system with username, password, email, and isAdmin
+        flag
+      parameters:
+      - description: Registration Data
+        in: body
+        name: registrationData
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TokenResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Register to the system
+      tags:
+      - Auth
 swagger: "2.0"

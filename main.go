@@ -12,6 +12,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
+// @title           Swagger Costumer APP
+// @version         2.0
+// @description     This is a swagger documentation for Costumer APP.
 func main() {
 
 	//migrate and seeder
@@ -35,13 +38,14 @@ func main() {
 
 	v1.POST("/login", authController.Login)
 	v1.POST("/register", authController.Register)
-	v1.Use(utils.AdminAuthMiddleware())
 
 	v1.GET("/customers", customerController.GetCustomers)
 	v1.GET("/customers/:id", customerController.GetCustomer)
 	v1.POST("/customers", customerController.CreateCustomer)
 	v1.PUT("/customers/:id", customerController.UpdateCustomer)
 	v1.DELETE("/customers/:id", customerController.DeleteCustomer)
+
+	v1.Use(utils.AdminAuthMiddleware())
 
 	v1.GET("/orders", orderController.GetOrders)
 	v1.GET("/orders/:id", orderController.GetOrder)
