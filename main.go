@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	docs "costumer/docs"
+	seed "costumer/seeder"
 
 	swaggerfiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -18,10 +19,10 @@ import (
 func main() {
 
 	//migrate and seeder
-	// seed.CreateMigration()
-	// seed.SeedUsers()
-	// seed.SeedCustomers()
-	// seed.SeedProducts()
+	seed.CreateMigration()
+	seed.SeedUsers()
+	seed.SeedCustomers()
+	seed.SeedProducts()
 
 	router := gin.Default()
 
