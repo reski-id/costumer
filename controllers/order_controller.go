@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 
 	"costumer/models"
 	"costumer/utils"
@@ -94,12 +93,12 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders [post]
 func (controller OrderController) CreateOrder(c *gin.Context) {
-	_, role, err := utils.ExtractData(c)
-
-	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+	CustomerID, _, err := utils.ExtractData(c)
+	if CustomerID == -1 {
+		c.JSON(http.StatusBadRequest, gin.H{"Silahkan Login Terlebih dahulu": err.Error()})
 		return
 	}
+
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error A": err.Error()})
@@ -113,7 +112,8 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	order.CustomerID = uuid.New()
+	order.CustomerID = CustomerID
+	order.OrderStatus = "Pending"
 
 	result := db.Create(&order)
 	if result.Error != nil {
@@ -233,9 +233,9 @@ func (controller OrderController) SearchOrders(c *gin.Context) {
 	}
 
 	var orders []models.Order
-	query := "%" + c.Query("query") + "%"
+	query := c.Query("query")
 
-	result := db.Where("name LIKE ?", query).Find(&orders)
+	result := db.Where("customer_id", query).Find(&orders)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return

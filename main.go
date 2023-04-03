@@ -58,6 +58,7 @@ func main() {
 	v1.DELETE("/orders/:id", orderController.DeleteOrder)
 	v1.GET("/orders", orderController.GetOrders)
 	v1.GET("/orders/:id", orderController.GetOrder)
+	v1.GET("/order/search", orderController.SearchOrders)
 
 	router.Run(":8080")
 }
