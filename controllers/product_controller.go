@@ -25,6 +25,12 @@ type ProductController struct{}
 // @Failure 500 {object} models.ErrorResponse
 // @Router /product [post]
 func (controller ProductController) CreateProduct(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -36,19 +42,6 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
-
-	// Check if the user is an admin
-	// claims, exists := c.Get("claims")
-	// if !exists {
-	// 	c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-	// 	return
-	// }
-	// isAdmin := claims.(utils.Claims).IsAdmin
-	// if !isAdmin {
-	// 	c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-	// 	return
-	// }
-
 	if result := db.Create(&product); result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
@@ -69,6 +62,7 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products [get]
 func (controller ProductController) GetProducts(c *gin.Context) {
+	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -120,6 +114,7 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products/{id} [get]
 func (controller ProductController) GetProduct(c *gin.Context) {
+	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -150,6 +145,12 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products/{id} [put]
 func (controller ProductController) UpdateProduct(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -161,18 +162,6 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Product not found"})
 		return
 	}
-
-	// // Check if the user is an admin
-	// claims, exists := c.Get("claims")
-	// if !exists {
-	// 	c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-	// 	return
-	// }
-	// isAdmin := claims.(utils.Claims).IsAdmin
-	// if !isAdmin {
-	// 	c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-	// 	return
-	// }
 
 	if err := c.ShouldBind(&product); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
@@ -200,23 +189,17 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products/{id} [delete]
 func (controller ProductController) DeleteProduct(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
-
-	// // Check if the user is an admin
-	// claims, exists := c.Get("claims")
-	// if !exists {
-	// 	c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-	// 	return
-	// }
-	// isAdmin := claims.(utils.Claims).IsAdmin
-	// if !isAdmin {
-	// 	c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-	// 	return
-	// }
 
 	// Get the product ID from the URL parameters
 	id, err := strconv.Atoi(c.Param("id"))

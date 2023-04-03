@@ -24,6 +24,12 @@ type OrderController struct{}
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders [get]
 func (controller OrderController) GetOrders(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -55,6 +61,12 @@ func (controller OrderController) GetOrders(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders/{id} [get]
 func (controller OrderController) GetOrder(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -82,6 +94,12 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders [post]
 func (controller OrderController) CreateOrder(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error A": err.Error()})
@@ -119,6 +137,12 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders/{id} [put]
 func (controller OrderController) UpdateOrder(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -158,6 +182,12 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders/{id} [delete]
 func (controller OrderController) DeleteOrder(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -190,6 +220,12 @@ func (controller OrderController) DeleteOrder(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /orders/search [get]
 func (controller OrderController) SearchOrders(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
