@@ -225,3 +225,34 @@ func (controller ProductController) DeleteProduct(c *gin.Context) {
 
 	c.JSON(http.StatusOK, models.ErrorResponse{Error: "Product deleted successfully"})
 }
+
+// SearchProduct godoc
+// @Summary Search Product by name
+// @Description Search Product by name
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Param query query string true "Search query"
+// @Success 200 {object} []models.Product
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /Product/search [get]
+func (controller ProductController) SearchProduct(c *gin.Context) {
+
+	db, err := utils.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var Product []models.Product
+	query := "%" + c.Query("query") + "%"
+
+	result := db.Where("name LIKE ?", query).Find(&Product)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, Product)
+}
