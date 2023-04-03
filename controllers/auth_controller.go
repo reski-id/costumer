@@ -49,7 +49,7 @@ func (auth *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(user.ID)
+	token, err := utils.GenerateToken(int(user.ID), user.Role)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Token generation error"})
 		return
@@ -58,7 +58,7 @@ func (auth *AuthController) Login(c *gin.Context) {
 	response := models.TokenResponse{
 		Username: user.Username,
 		Email:    user.Email,
-		IsAdmin:  user.IsAdmin,
+		Role:     user.Role,
 		Token:    token,
 	}
 
@@ -102,18 +102,25 @@ func (auth *AuthController) Register(c *gin.Context) {
 		return
 	}
 
-	newUser := models.User{Username: registrationData.Username, Password: string(hash), Email: registrationData.Email, IsAdmin: registrationData.IsAdmin}
+	newUser := models.User{Username: registrationData.Username, Password: string(hash), Email: registrationData.Email, Role: registrationData.Role}
 	result = db.Create(&newUser)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "User creation error"})
 		return
 	}
 
-	token, err := utils.GenerateToken(newUser.ID)
+	token, err := utils.GenerateToken(int(newUser.ID), newUser.Role)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Token generation error"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token, "username": newUser.Username, "email": newUser.Email, "is_admin": newUser.IsAdmin})
+	response := models.TokenResponse{
+		Username: newUser.Username,
+		Email:    newUser.Email,
+		Role:     newUser.Role,
+		Token:    token,
+	}
+
+	c.JSON(http.StatusOK, response)
 }

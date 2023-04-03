@@ -1,103 +1,76 @@
 package utils
 
 import (
+	"fmt"
+	"log"
 	"net/http"
-	"time"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-
-	"costumer/models"
 )
 
-var jwtKey = []byte("secret_key")
+var jwtKey = []byte("secret_key23e4")
 
 type Claims struct {
-	UserID  uint `json:"user_id"`
-	IsAdmin bool `json:"is_admin"`
+	UserID int  `json:"user_id"`
+	Role   bool `json:"is_admin"`
 	jwt.StandardClaims
 }
 
-func GenerateToken(userID uint) (string, error) {
-	expirationTime := time.Now().Add(24 * time.Hour)
-
-	claims := &Claims{
-		UserID: userID,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
-}
-
-func GenerateTokenAdmin(userID uint) (string, error) {
-	expirationTime := time.Now().Add(24 * time.Hour)
-
-	claims := &Claims{
-		UserID:  userID,
-		IsAdmin: true,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
-}
-
-func VerifyToken(tokenString string) (*models.User, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, jwt.ErrSignatureInvalid
-		}
-		return jwtKey, nil
-	})
+func GenerateToken(userID int, Role string) (string, error) {
+	// function body
+	info := jwt.MapClaims{}
+	info["ID"] = userID
+	info["role"] = Role
+	auth := jwt.NewWithClaims(jwt.SigningMethodHS256, info)
+	token, err := auth.SignedString(jwtKey)
 	if err != nil {
-		return nil, err
+		log.Fatal("cannot generate key")
+		return "", nil
 	}
-
-	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		db, err := Connect()
-		if err != nil {
-			return nil, err
-		}
-
-		var user models.User
-		result := db.First(&user, claims.UserID)
-		if result.Error != nil {
-			return nil, result.Error
-		}
-
-		return &user, nil
-	} else {
-		return nil, jwt.ErrInvalidKey
-	}
+	return token, err
 }
 
-func AdminAuthMiddleware() gin.HandlerFunc {
+func ExtractData(c *gin.Context) (int, string) {
+	head := c.GetHeader("Authorization")
+	token := strings.Split(head, " ")
+
+	res, _ := jwt.Parse(token[len(token)-1], func(t *jwt.Token) (interface{}, error) {
+		return []byte(jwtKey), nil
+	})
+	if res.Valid {
+		resClaim := res.Claims.(jwt.MapClaims)
+		parseID := int(resClaim["ID"].(float64))
+		parseRole := resClaim["role"].(string)
+		return parseID, parseRole
+	}
+	return -1, ""
+}
+
+func UseJWT(secret []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Missing authorization header"})
 			return
 		}
-
-		claims, err := VerifyToken(tokenString)
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return []byte(secret), nil
+		})
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			return
 		}
-
-		if !claims.IsAdmin {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
-			c.Abort()
-			return
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			c.Set("ID", int(claims["ID"].(float64)))
+			c.Set("role", claims["role"].(string))
+			c.Next()
+		} else {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		}
-
-		c.Next()
 	}
 }

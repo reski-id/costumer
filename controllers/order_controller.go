@@ -84,14 +84,14 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 func (controller OrderController) CreateOrder(c *gin.Context) {
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error A": err.Error()})
 		return
 	}
 
 	var order models.Order
-	err = c.ShouldBindJSON(&order)
+	err = c.ShouldBind(&order)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error B": err.Error()})
 		return
 	}
 
@@ -99,7 +99,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 
 	result := db.Create(&order)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error C": result.Error.Error()})
 		return
 	}
 
@@ -132,7 +132,7 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 		return
 	}
 
-	err = c.ShouldBindJSON(&order)
+	err = c.ShouldBind(&order)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

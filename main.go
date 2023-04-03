@@ -2,7 +2,6 @@ package main
 
 import (
 	"costumer/controllers"
-	"costumer/utils"
 
 	"github.com/gin-gonic/gin"
 
@@ -46,19 +45,18 @@ func main() {
 	v1.PUT("/customers/:id", customerController.UpdateCustomer)
 	v1.DELETE("/customers/:id", customerController.DeleteCustomer)
 
-	v1.Use(utils.AdminAuthMiddleware())
+	//fitur only admin can access
+	v1.GET("/products", productController.GetProducts)
+	v1.GET("/products/:id", productController.GetProduct)
+	v1.POST("/products", productController.CreateProduct)
+	v1.PUT("/products/:id", productController.UpdateProduct)
+	v1.DELETE("/products/:id", productController.DeleteProduct)
 
 	v1.GET("/orders", orderController.GetOrders)
 	v1.GET("/orders/:id", orderController.GetOrder)
 	v1.POST("/orders", orderController.CreateOrder)
 	v1.PUT("/orders/:id", orderController.UpdateOrder)
 	v1.DELETE("/orders/:id", orderController.DeleteOrder)
-
-	v1.GET("/products", productController.GetProducts)
-	v1.GET("/products/:id", productController.GetProduct)
-	v1.POST("/products", productController.CreateProduct)
-	v1.PUT("/products/:id", productController.UpdateProduct)
-	v1.DELETE("/products/:id", productController.DeleteProduct)
 
 	router.Run(":8080")
 }
