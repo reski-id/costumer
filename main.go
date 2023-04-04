@@ -15,6 +15,11 @@ import (
 // @title           Swagger Costumer APP
 // @version         2.0
 // @description     This is a swagger documentation for Costumer APP.
+// @BasePath        /api/v1
+// @host            localhost:8080
+// @schemes         http https
+// @SecurityDefinition  jwt
+// @Security        jwt
 func main() {
 
 	//migrate and seeder
@@ -54,10 +59,13 @@ func main() {
 	v1.GET("/products/search", productController.SearchProduct)
 
 	v1.POST("/orders", orderController.CreateOrder)
+	v1.POST("/multiorder", orderController.CreateOrderMulti)
 	v1.PUT("/orders/:id", orderController.UpdateOrder)
 	v1.DELETE("/orders/:id", orderController.DeleteOrder)
 	v1.GET("/orders", orderController.GetOrders)
+	v1.GET("/myorder", orderController.GetMyOrders)
 	v1.GET("/orders/:id", orderController.GetOrder)
+	v1.GET("/orders/search", orderController.SearchOrders)
 
 	router.Run(":8080")
 }

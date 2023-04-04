@@ -436,6 +436,16 @@
 		{
 			"name": "product update",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Nywicm9sZSI6ImFkbWluIn0.kYIKJZyV3yhTy5Z9hoHbb20anoVz39Shliqc8YpArlg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -472,6 +482,16 @@
 		{
 			"name": "product delete",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Nywicm9sZSI6ImFkbWluIn0.kYIKJZyV3yhTy5Z9hoHbb20anoVz39Shliqc8YpArlg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -580,6 +600,50 @@
 			"response": []
 		},
 		{
+			"name": "ProductSearch",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products/search?query=dell",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "dell"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "productgetone",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -677,7 +741,167 @@
 			"response": []
 		},
 		{
-			"name": "orders Create",
+			"name": "myorders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Niwicm9sZSI6InVzZXIifQ.jnoApCwqdLMRho0CYMD5nMPkDlKMHBP5izNVTUciIBI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/myorder",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"myorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatemyOrder",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Niwicm9sZSI6InVzZXIifQ.jnoApCwqdLMRho0CYMD5nMPkDlKMHBP5izNVTUciIBI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/myorder",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"myorder"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OrderSearch",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers/search?query=doe",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "doe"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders multi",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -703,6 +927,51 @@
 					]
 				},
 				"url": {
+					"raw": "localhost:8080/api/v1/ordermulti",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"ordermulti"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Niwicm9sZSI6InVzZXIifQ.jnoApCwqdLMRho0CYMD5nMPkDlKMHBP5izNVTUciIBI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "productId",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
 					"raw": "localhost:8080/api/v1/orders",
 					"host": [
 						"localhost"
@@ -712,6 +981,100 @@
 						"api",
 						"v1",
 						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Nywicm9sZSI6ImFkbWluIn0.kYIKJZyV3yhTy5Z9hoHbb20anoVz39Shliqc8YpArlg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "orderStatus",
+							"value": "Success",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/orders/8",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"8"
+					],
+					"query": [
+						{
+							"key": "orderStatus",
+							"value": "Success",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products/6",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"6"
 					]
 				}
 			},

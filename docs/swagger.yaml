@@ -1,3 +1,4 @@
+basePath: /api/v1
 definitions:
   models.Customer:
     properties:
@@ -41,22 +42,21 @@ definitions:
     properties:
       createdAt:
         type: string
-      customer:
-        $ref: '#/definitions/models.Customer'
       customerId:
-        type: string
+        type: integer
       id:
         type: integer
-      name:
+      orderStatus:
         type: string
+      productId:
+        type: integer
       quantity:
         type: integer
       updatedAt:
         type: string
     required:
-    - customer
     - customerId
-    - name
+    - productId
     - quantity
     type: object
   models.Product:
@@ -65,27 +65,40 @@ definitions:
         type: string
       description:
         type: string
+      file:
+        type: string
       id:
         type: integer
-      imageURL:
-        type: string
       name:
         type: string
       price:
         type: number
-      quantity:
+      qty:
         type: integer
       sku:
         type: string
       updatedAt:
         type: string
+    required:
+    - name
+    - price
+    - qty
+    type: object
+  models.ProductsResponse:
+    properties:
+      count:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/models.Product'
+        type: array
     type: object
   models.TokenResponse:
     properties:
       email:
         type: string
-      is_admin:
-        type: boolean
+      role:
+        type: string
       token:
         type: string
       username:
@@ -99,11 +112,11 @@ definitions:
         type: string
       id:
         type: integer
-      isAdmin:
-        type: boolean
       name:
         type: string
       password:
+        type: string
+      role:
         type: string
       updatedAt:
         type: string
@@ -113,8 +126,10 @@ definitions:
     - email
     - name
     - password
+    - role
     - username
     type: object
+host: localhost:8080
 info:
   contact: {}
   description: This is a swagger documentation for Costumer APP.
@@ -125,13 +140,19 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a list of customers with pagination
+      description: Get a list of customers, paginated by `page` and `limit` query
+        parameters
       parameters:
-      - description: Page number
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Page number (default 1)
         in: query
         name: page
         type: integer
-      - description: Number of items per page
+      - description: Number of customers per page (default 10)
         in: query
         name: limit
         type: integer
@@ -144,10 +165,16 @@ paths:
             items:
               $ref: '#/definitions/models.Customer'
             type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get a list of customers
       tags:
       - Customers
@@ -156,7 +183,7 @@ paths:
       - application/json
       description: Create a new customer
       parameters:
-      - description: Customer data
+      - description: Customer object
         in: body
         name: customer
         required: true
@@ -184,6 +211,11 @@ paths:
     delete:
       description: Delete a customer by ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Customer ID
         in: path
         name: id
@@ -210,8 +242,13 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get a customer by ID
+      description: Get a single customer by ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Customer ID
         in: path
         name: id
@@ -224,11 +261,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.Customer'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
         "404":
           description: Not Found
           schema:
             $ref: '#/definitions/models.ErrorResponse'
-      summary: Get a customer by ID
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a customer
       tags:
       - Customers
     put:
@@ -275,6 +322,11 @@ paths:
       - application/json
       description: Search customers by name
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Search query
         in: query
         name: query
@@ -304,6 +356,7 @@ paths:
     post:
       consumes:
       - application/json
+      - ' multipart/form-data'
       description: Login to the system with username and password
       parameters:
       - description: Login Data
@@ -312,6 +365,16 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.LoginData'
+      - description: Username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: Password
+        in: formData
+        name: password
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -334,6 +397,33 @@ paths:
       summary: Login to the system
       tags:
       - Auth
+  /myorder:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of orders placed by the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get my orders
+      tags:
+      - orders
   /orders:
     get:
       consumes:
@@ -403,12 +493,16 @@ paths:
         in: path
         name: id
         required: true
-        type: string
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
           schema:
             $ref: '#/definitions/models.ErrorResponse'
         "404":
@@ -419,7 +513,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
-      summary: Delete order
+      summary: Delete an order
       tags:
       - orders
     get:
@@ -492,13 +586,21 @@ paths:
     get:
       consumes:
       - application/json
-      description: Search orders by name
+      description: Search for orders by customer ID
       parameters:
-      - description: Search query
+      - description: Customer ID
         in: query
         name: query
         required: true
         type: string
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Number of items to retrieve per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -508,6 +610,10 @@ paths:
             items:
               $ref: '#/definitions/models.Order'
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
@@ -515,18 +621,49 @@ paths:
       summary: Search orders
       tags:
       - orders
-  /product:
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of products with pagination support
+      parameters:
+      - description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page (default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProductsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Get a list of products
+      tags:
+      - products
     post:
       consumes:
       - application/json
-      description: Create a new product
+      description: Create a new product with the specified details
       parameters:
-      - description: Bearer Token
+      - description: Bearer {token}
         in: header
         name: Authorization
         required: true
         type: string
-      - description: Product information
+      - description: Product details
         in: body
         name: product
         required: true
@@ -535,8 +672,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/models.Product'
         "400":
@@ -553,38 +690,18 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Create a new product
       tags:
-      - Products
-  /products:
-    get:
-      description: Get a list of products with pagination support
-      operationId: get-products
-      parameters:
-      - description: Page number, default is 1
-        in: query
-        name: page
-        type: integer
-      - description: Number of products per page, default is 10
-        in: query
-        name: limit
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Product'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/models.ErrorResponse'
-      summary: Get a list of products
-      tags:
-      - Products
+      - products
   /products/{id}:
     delete:
-      description: Delete a product by ID
+      consumes:
+      - application/json
+      description: Delete a product with the specified ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Product ID
         in: path
         name: id
@@ -596,7 +713,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Product'
+            $ref: '#/definitions/models.ErrorResponse'
         "400":
           description: Bad Request
           schema:
@@ -615,11 +732,17 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Delete a product
       tags:
-      - Products
+      - products
     get:
-      description: Retrieve a product using its unique identifier
-      operationId: get-product-by-id
+      consumes:
+      - application/json
+      description: Retrieve a product by ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Product ID
         in: path
         name: id
@@ -642,18 +765,23 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Get a product by ID
       tags:
-      - Products
+      - products
     put:
       consumes:
       - application/json
-      description: Update a product by ID
+      description: Update a product with the specified ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Product ID
         in: path
         name: id
         required: true
         type: integer
-      - description: Product object
+      - description: Product details
         in: body
         name: product
         required: true
@@ -684,7 +812,34 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Update a product
       tags:
-      - Products
+      - products
+  /products/search:
+    get:
+      consumes:
+      - application/json
+      description: Search products with a matching name
+      parameters:
+      - description: Search query
+        in: query
+        name: query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Product'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Search products
+      tags:
+      - products
   /register:
     post:
       consumes:
@@ -716,4 +871,7 @@ paths:
       summary: Register to the system
       tags:
       - Auth
+schemes:
+- http
+- https
 swagger: "2.0"

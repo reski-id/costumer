@@ -11,24 +11,23 @@ import (
 
 type ProductController struct{}
 
-// CreateProduct godoc
 // @Summary Create a new product
-// @Description Create a new product
-// @Tags Products
+// @Description Create a new product with the specified details
+// @Tags products
 // @Accept json
 // @Produce json
-// @Param Authorization header string true "Bearer Token"
-// @Param product body models.Product true "Product information"
-// @Success 200 {object} models.Product
+// @Param Authorization header string true "Bearer {token}"
+// @Param product body models.Product true "Product details"
+// @Success 201 {object} models.Product
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
-// @Router /product [post]
+// @Router /products [post]
 func (controller ProductController) CreateProduct(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 	db, err := utils.Connect()
@@ -50,15 +49,16 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, product)
 }
 
-// GetProducts retrieves all products with pagination support
+// GetProducts godoc
 // @Summary Get a list of products
 // @Description Get a list of products with pagination support
-// @Tags Products
-// @ID get-products
-// @Produce  json
-// @Param page query int false "Page number, default is 1"
-// @Param limit query int false "Number of products per page, default is 10"
-// @Success 200 {object} ProductsResponse
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number (default 1)"
+// @Param limit query int false "Number of items per page (default 10)"
+// @Success 200 {object} models.ProductsResponse
+// @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products [get]
 func (controller ProductController) GetProducts(c *gin.Context) {
@@ -102,12 +102,12 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// GetProduct retrieves a product by ID
 // @Summary Get a product by ID
-// @Description Retrieve a product using its unique identifier
-// @ID get-product-by-id
+// @Description Retrieve a product by ID
+// @Tags products
+// @Accept json
 // @Produce json
-// @Tags Products
+// @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
 // @Success 200 {object} models.Product
 // @Failure 404 {object} models.ErrorResponse
@@ -130,14 +130,16 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, product)
 }
 
-// UpdateProduct updates a product by ID
+// UpdateProduct updates an existing product
+// Only admin can update a product
 // @Summary Update a product
-// @Description Update a product by ID
-// @Tags Products
+// @Description Update a product with the specified ID
+// @Tags products
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
-// @Param product body models.Product true "Product object"
+// @Param product body models.Product true "Product details"
 // @Success 200 {object} models.Product
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
@@ -148,7 +150,7 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 	db, err := utils.Connect()
@@ -176,13 +178,16 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, product)
 }
 
-// DeleteProduct deletes a product by ID
+// DeleteProduct deletes an existing product
+// Only admin can delete a product
 // @Summary Delete a product
-// @Description Delete a product by ID
-// @Tags Products
+// @Description Delete a product with the specified ID
+// @Tags products
+// @Accept json
 // @Produce json
+// @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
-// @Success 200 {object} models.Product
+// @Success 200 {object} models.ErrorResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
@@ -192,7 +197,7 @@ func (controller ProductController) DeleteProduct(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 	db, err := utils.Connect()
@@ -226,22 +231,21 @@ func (controller ProductController) DeleteProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, models.ErrorResponse{Error: "Product deleted successfully"})
 }
 
-// SearchProduct godoc
-// @Summary Search Product by name
-// @Description Search Product by name
-// @Tags Product
+// SearchProduct searches for products with a matching name
+// @Summary Search products
+// @Description Search products with a matching name
+// @Tags products
 // @Accept json
 // @Produce json
 // @Param query query string true "Search query"
-// @Success 200 {object} []models.Product
-// @Failure 400 {object} models.ErrorResponse
+// @Success 200 {array} models.Product
 // @Failure 500 {object} models.ErrorResponse
-// @Router /Product/search [get]
+// @Router /products/search [get]
 func (controller ProductController) SearchProduct(c *gin.Context) {
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -250,7 +254,7 @@ func (controller ProductController) SearchProduct(c *gin.Context) {
 
 	result := db.Where("name LIKE ?", query).Find(&Product)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 

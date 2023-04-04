@@ -12,28 +12,30 @@ import (
 
 type CustomerController struct{}
 
-// GetCustomers godoc
 // @Summary Get a list of customers
-// @Description Get a list of customers with pagination
+// @Description Get a list of customers, paginated by `page` and `limit` query parameters
 // @Tags Customers
-// @Param page query int false "Page number"
-// @Param limit query int false "Number of items per page"
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
-// @Success 200 {object} []models.Customer
+// @Param Authorization header string true "Bearer {token}"
+// @Param page query integer false "Page number (default 1)"
+// @Param limit query integer false "Number of customers per page (default 10)"
+// @Success 200 {array} models.Customer
+// @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers [get]
 func (controller CustomerController) GetCustomers(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Database connection error"})
 		return
 	}
 
@@ -44,76 +46,77 @@ func (controller CustomerController) GetCustomers(c *gin.Context) {
 
 	result := db.Offset(offset).Limit(limit).Find(&customers)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, customers)
 }
 
-// GetCustomer godoc
-// @Summary Get a customer by ID
-// @Description Get a customer by ID
+// @Summary Get a customer
+// @Description Get a single customer by ID
 // @Tags Customers
-// @Param id path int true "Customer ID"
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param id path int true "Customer ID"
 // @Success 200 {object} models.Customer
+// @Failure 401 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /customers/{id} [get]
 func (controller CustomerController) GetCustomer(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 	fmt.Println(role)
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 	var customer models.Customer
 	result := db.First(&customer, c.Param("id"))
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Customer not found"})
 		return
 	}
 
 	c.JSON(http.StatusOK, customer)
 }
 
-// CreateCustomer godoc
 // @Summary Create a customer
 // @Description Create a new customer
 // @Tags Customers
 // @Accept json
 // @Produce json
-// @Param customer body models.Customer true "Customer data"
+// @Param customer body models.Customer true "Customer object"
 // @Success 200 {object} models.Customer
 // @Failure 400 {object} models.ErrorResponse
-// @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers [post]
 func (controller CustomerController) CreateCustomer(c *gin.Context) {
 	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	var customer models.Customer
 	err = c.ShouldBind(&customer)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	result := db.Create(&customer)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 
@@ -137,26 +140,26 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	var customer models.Customer
 	result := db.First(&customer, c.Param("id"))
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Customer not found"})
 		return
 	}
 
 	err = c.ShouldBind(&customer)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	result = db.Save(&customer)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 
@@ -167,6 +170,7 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 // @Summary Delete a customer by ID
 // @Description Delete a customer by ID
 // @Tags Customers
+// @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Customer ID"
 // @Produce json
 // @Success 200 {object} models.ErrorResponse
@@ -177,25 +181,25 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	var customer models.Customer
 	result := db.First(&customer, c.Param("id"))
 	if result.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Customer not found"})
+		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Customer not found"})
 		return
 	}
 
 	result = db.Delete(&customer)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 
@@ -208,6 +212,7 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 // @Tags Customers
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Bearer {token}"
 // @Param query query string true "Search query"
 // @Success 200 {object} []models.Customer
 // @Failure 400 {object} models.ErrorResponse
@@ -217,12 +222,12 @@ func (controller CustomerController) SearchCustomers(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
 		return
 	}
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -231,7 +236,7 @@ func (controller CustomerController) SearchCustomers(c *gin.Context) {
 
 	result := db.Where("name LIKE ?", query).Find(&customers)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 

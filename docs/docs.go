@@ -18,7 +18,12 @@ const docTemplate = `{
     "paths": {
         "/customers": {
             "get": {
-                "description": "Get a list of customers with pagination",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a list of customers, paginated by ` + "`" + `page` + "`" + ` and ` + "`" + `limit` + "`" + ` query parameters",
                 "consumes": [
                     "application/json"
                 ],
@@ -31,14 +36,21 @@ const docTemplate = `{
                 "summary": "Get a list of customers",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
-                        "description": "Page number",
+                        "description": "Page number (default 1)",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "Number of items per page",
+                        "description": "Number of customers per page (default 10)",
                         "name": "limit",
                         "in": "query"
                     }
@@ -51,6 +63,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.Customer"
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
                         }
                     },
                     "500": {
@@ -75,7 +93,7 @@ const docTemplate = `{
                 "summary": "Create a customer",
                 "parameters": [
                     {
-                        "description": "Customer data",
+                        "description": "Customer object",
                         "name": "customer",
                         "in": "body",
                         "required": true,
@@ -122,6 +140,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Search query",
                         "name": "query",
                         "in": "query",
@@ -155,7 +180,12 @@ const docTemplate = `{
         },
         "/customers/{id}": {
             "get": {
-                "description": "Get a customer by ID",
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a single customer by ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -165,8 +195,15 @@ const docTemplate = `{
                 "tags": [
                     "Customers"
                 ],
-                "summary": "Get a customer by ID",
+                "summary": "Get a customer",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Customer ID",
@@ -182,8 +219,20 @@ const docTemplate = `{
                             "$ref": "#/definitions/models.Customer"
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
                         }
@@ -258,6 +307,13 @@ const docTemplate = `{
                 "summary": "Delete a customer by ID",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "Customer ID",
                         "name": "id",
@@ -291,7 +347,8 @@ const docTemplate = `{
             "post": {
                 "description": "Login to the system with username and password",
                 "consumes": [
-                    "application/json"
+                    "application/json",
+                    " multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -309,6 +366,20 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/models.LoginData"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Username",
+                        "name": "username",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Password",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -326,6 +397,49 @@ const docTemplate = `{
                     },
                     "401": {
                         "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/myorder": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a list of orders placed by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Get my orders",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Order"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
                         }
@@ -431,7 +545,7 @@ const docTemplate = `{
         },
         "/orders/search": {
             "get": {
-                "description": "Search orders by name",
+                "description": "Search for orders by customer ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -445,10 +559,22 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Search query",
+                        "description": "Customer ID",
                         "name": "query",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items to retrieve per page (default: 10)",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -459,6 +585,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/models.Order"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
                         }
                     },
                     "500": {
@@ -581,10 +713,10 @@ const docTemplate = `{
                 "tags": [
                     "orders"
                 ],
-                "summary": "Delete order",
+                "summary": "Delete an order",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "Order ID",
                         "name": "id",
                         "in": "path",
@@ -594,6 +726,12 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
                         }
@@ -613,9 +751,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/product": {
-            "post": {
-                "description": "Create a new product",
+        "/products": {
+            "get": {
+                "description": "Get a list of products with pagination support",
                 "consumes": [
                     "application/json"
                 ],
@@ -623,19 +761,66 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "products"
+                ],
+                "summary": "Get a list of products",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page (default 10)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.ProductsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new product with the specified details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
                 ],
                 "summary": "Create a new product",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Bearer Token",
+                        "description": "Bearer {token}",
                         "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
                     {
-                        "description": "Product information",
+                        "description": "Product details",
                         "name": "product",
                         "in": "body",
                         "required": true,
@@ -645,8 +830,8 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/models.Product"
                         }
@@ -672,36 +857,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/products": {
+        "/products/search": {
             "get": {
-                "description": "Get a list of products with pagination support",
+                "description": "Search products with a matching name",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "products"
                 ],
-                "summary": "Get a list of products",
-                "operationId": "get-products",
+                "summary": "Search products",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Page number, default is 1",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Number of products per page, default is 10",
-                        "name": "limit",
-                        "in": "query"
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "query",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
                         }
                     },
                     "500": {
@@ -715,16 +900,25 @@ const docTemplate = `{
         },
         "/products/{id}": {
             "get": {
-                "description": "Retrieve a product using its unique identifier",
+                "description": "Retrieve a product by ID",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "products"
                 ],
                 "summary": "Get a product by ID",
-                "operationId": "get-product-by-id",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Product ID",
@@ -755,7 +949,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update a product by ID",
+                "description": "Update a product with the specified ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -763,10 +957,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "products"
                 ],
                 "summary": "Update a product",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Product ID",
@@ -775,7 +976,7 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Product object",
+                        "description": "Product details",
                         "name": "product",
                         "in": "body",
                         "required": true,
@@ -818,15 +1019,25 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a product by ID",
+                "description": "Delete a product with the specified ID",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Products"
+                    "products"
                 ],
                 "summary": "Delete a product",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Product ID",
@@ -839,7 +1050,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Product"
+                            "$ref": "#/definitions/models.ErrorResponse"
                         }
                     },
                     "400": {
@@ -977,26 +1188,25 @@ const docTemplate = `{
         "models.Order": {
             "type": "object",
             "required": [
-                "customer",
                 "customerId",
-                "name",
+                "productId",
                 "quantity"
             ],
             "properties": {
                 "createdAt": {
                     "type": "string"
                 },
-                "customer": {
-                    "$ref": "#/definitions/models.Customer"
-                },
                 "customerId": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "orderStatus": {
                     "type": "string"
+                },
+                "productId": {
+                    "type": "integer"
                 },
                 "quantity": {
                     "type": "integer"
@@ -1008,6 +1218,11 @@ const docTemplate = `{
         },
         "models.Product": {
             "type": "object",
+            "required": [
+                "name",
+                "price",
+                "qty"
+            ],
             "properties": {
                 "createdAt": {
                     "type": "string"
@@ -1015,11 +1230,11 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "file": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
-                },
-                "imageURL": {
-                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -1027,7 +1242,7 @@ const docTemplate = `{
                 "price": {
                     "type": "number"
                 },
-                "quantity": {
+                "qty": {
                     "type": "integer"
                 },
                 "sku": {
@@ -1038,14 +1253,28 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ProductsResponse": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Product"
+                    }
+                }
+            }
+        },
         "models.TokenResponse": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "is_admin": {
-                    "type": "boolean"
+                "role": {
+                    "type": "string"
                 },
                 "token": {
                     "type": "string"
@@ -1061,6 +1290,7 @@ const docTemplate = `{
                 "email",
                 "name",
                 "password",
+                "role",
                 "username"
             ],
             "properties": {
@@ -1073,13 +1303,13 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "isAdmin": {
-                    "type": "boolean"
-                },
                 "name": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "role": {
                     "type": "string"
                 },
                 "updatedAt": {
@@ -1096,9 +1326,9 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
+	Host:             "localhost:8080",
+	BasePath:         "/api/v1",
+	Schemes:          []string{"http", "https"},
 	Title:            "Swagger Costumer APP",
 	Description:      "This is a swagger documentation for Costumer APP.",
 	InfoInstanceName: "swagger",
