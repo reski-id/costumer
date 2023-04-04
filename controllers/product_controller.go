@@ -25,6 +25,12 @@ type ProductController struct{}
 // @Failure 500 {object} models.ErrorResponse
 // @Router /product [post]
 func (controller ProductController) CreateProduct(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -32,23 +38,10 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 	}
 
 	var product models.Product
-	if err := c.ShouldBindJSON(&product); err != nil {
+	if err := c.ShouldBind(&product); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
-
-	// Check if the user is an admin
-	claims, exists := c.Get("claims")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-		return
-	}
-	isAdmin := claims.(utils.Claims).IsAdmin
-	if !isAdmin {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-		return
-	}
-
 	if result := db.Create(&product); result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
@@ -65,10 +58,11 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 // @Produce  json
 // @Param page query int false "Page number, default is 1"
 // @Param limit query int false "Number of products per page, default is 10"
-// @Success 200 {object} models.Product
+// @Success 200 {object} ProductsResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products [get]
 func (controller ProductController) GetProducts(c *gin.Context) {
+	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -94,7 +88,18 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, products)
+	var total int64
+	if result := db.Model(&models.Product{}).Count(&total); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
+		return
+	}
+
+	response := models.ProductsResponse{
+		Data:  products,
+		Count: total,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // GetProduct retrieves a product by ID
@@ -109,6 +114,7 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products/{id} [get]
 func (controller ProductController) GetProduct(c *gin.Context) {
+	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -139,6 +145,12 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products/{id} [put]
 func (controller ProductController) UpdateProduct(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -151,19 +163,7 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	// Check if the user is an admin
-	claims, exists := c.Get("claims")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-		return
-	}
-	isAdmin := claims.(utils.Claims).IsAdmin
-	if !isAdmin {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-		return
-	}
-
-	if err := c.ShouldBindJSON(&product); err != nil {
+	if err := c.ShouldBind(&product); err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
@@ -189,21 +189,15 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /products/{id} [delete]
 func (controller ProductController) DeleteProduct(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
-		return
-	}
-
-	// Check if the user is an admin
-	claims, exists := c.Get("claims")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
-		return
-	}
-	isAdmin := claims.(utils.Claims).IsAdmin
-	if !isAdmin {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Unauthorized"})
 		return
 	}
 
@@ -230,4 +224,35 @@ func (controller ProductController) DeleteProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, models.ErrorResponse{Error: "Product deleted successfully"})
+}
+
+// SearchProduct godoc
+// @Summary Search Product by name
+// @Description Search Product by name
+// @Tags Product
+// @Accept json
+// @Produce json
+// @Param query query string true "Search query"
+// @Success 200 {object} []models.Product
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /Product/search [get]
+func (controller ProductController) SearchProduct(c *gin.Context) {
+
+	db, err := utils.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	var Product []models.Product
+	query := "%" + c.Query("query") + "%"
+
+	result := db.Where("name LIKE ?", query).Find(&Product)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, Product)
 }

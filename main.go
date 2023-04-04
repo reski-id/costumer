@@ -2,7 +2,6 @@ package main
 
 import (
 	"costumer/controllers"
-	"costumer/utils"
 
 	"github.com/gin-gonic/gin"
 
@@ -40,25 +39,25 @@ func main() {
 	v1.POST("/login", authController.Login)
 	v1.POST("/register", authController.Register)
 
-	v1.GET("/customers", customerController.GetCustomers)
-	v1.GET("/customers/:id", customerController.GetCustomer)
 	v1.POST("/customers", customerController.CreateCustomer)
 	v1.PUT("/customers/:id", customerController.UpdateCustomer)
 	v1.DELETE("/customers/:id", customerController.DeleteCustomer)
+	v1.GET("/customers", customerController.GetCustomers)
+	v1.GET("/customers/:id", customerController.GetCustomer)
+	v1.GET("/customers/search", customerController.SearchCustomers)
 
-	v1.Use(utils.AdminAuthMiddleware())
-
-	v1.GET("/orders", orderController.GetOrders)
-	v1.GET("/orders/:id", orderController.GetOrder)
-	v1.POST("/orders", orderController.CreateOrder)
-	v1.PUT("/orders/:id", orderController.UpdateOrder)
-	v1.DELETE("/orders/:id", orderController.DeleteOrder)
-
-	v1.GET("/products", productController.GetProducts)
-	v1.GET("/products/:id", productController.GetProduct)
 	v1.POST("/products", productController.CreateProduct)
 	v1.PUT("/products/:id", productController.UpdateProduct)
 	v1.DELETE("/products/:id", productController.DeleteProduct)
+	v1.GET("/products", productController.GetProducts)
+	v1.GET("/products/:id", productController.GetProduct)
+	v1.GET("/products/search", productController.SearchProduct)
+
+	v1.POST("/orders", orderController.CreateOrder)
+	v1.PUT("/orders/:id", orderController.UpdateOrder)
+	v1.DELETE("/orders/:id", orderController.DeleteOrder)
+	v1.GET("/orders", orderController.GetOrders)
+	v1.GET("/orders/:id", orderController.GetOrder)
 
 	router.Run(":8080")
 }

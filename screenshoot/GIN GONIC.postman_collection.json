@@ -1,0 +1,721 @@
+{
+	"info": {
+		"_postman_id": "1bf818a0-c56c-4b8c-bbff-adee565ab4a3",
+		"name": "GIN GONIC",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21893722"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Ahmad Reski",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "reski",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "reski1234",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "reski@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "admin",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "reski",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "reski1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "costumer create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "costumer update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "John Doe testing update",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "john.doeupdate@example.com",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "1212112",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "123 Main St upt",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "costumer delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "reski",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "testing",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllCostumer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "reski",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "testing",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers?page=1&limit=5",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetOneCostumer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CostumerSearch",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/customers/search?query=doe",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "doe"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "laptop",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "laptop testing",
+							"type": "text"
+						},
+						{
+							"key": "price",
+							"value": "1000000000",
+							"type": "text"
+						},
+						{
+							"key": "sku",
+							"value": "1111111111111111111",
+							"type": "text"
+						},
+						{
+							"key": "qty",
+							"value": "3",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"value": "dddddddddd",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Dell XPS 13 update",
+							"type": "text"
+						},
+						{
+							"key": "qty",
+							"value": "20",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products/6",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product get all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJpc19hZG1pbiI6ZmFsc2UsImV4cCI6MTY3OTM4NTYwOX0.cpd16hFb92SK2gq2eYqOqDlDmkwTCU8JbAn1eiVD8RU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products?limit=3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "productgetone",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/products/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "testing address",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "0812121212",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testing@gmail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "orders Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "customerId",
+							"value": "74d186de-c6fd-11ed-afa1-0242ac120002",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "laptop",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "3",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/orders",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

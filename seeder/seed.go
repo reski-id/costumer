@@ -25,9 +25,9 @@ func SeedUsers() {
 
 	// create some users
 	users := []models.User{
-		{Username: "john_doe", Password: "password1", IsAdmin: false, Email: "jhon@gmail.com", Name: "Jhon"},
-		{Username: "jane_doe", Password: "password2", IsAdmin: true, Email: "adm@gmail.com", Name: "Jhane"},
-		{Username: "bob_smith", Password: "password3", IsAdmin: false, Email: "bob@gmail.com", Name: "Bob"},
+		{Username: "john_doe", Password: "password1", Role: "user", Email: "jhon@gmail.com", Name: "Jhon"},
+		{Username: "jane_doe", Password: "password2", Role: "admin", Email: "adm@gmail.com", Name: "Jhane"},
+		{Username: "bob_smith", Password: "password3", Role: "user", Email: "bob@gmail.com", Name: "Bob"},
 	}
 
 	for i := range users {

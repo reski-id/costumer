@@ -3,6 +3,7 @@ package controllers
 import (
 	"costumer/models"
 	"costumer/utils"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -23,6 +24,13 @@ type CustomerController struct{}
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers [get]
 func (controller CustomerController) GetCustomers(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
+
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -54,6 +62,13 @@ func (controller CustomerController) GetCustomers(c *gin.Context) {
 // @Failure 404 {object} models.ErrorResponse
 // @Router /customers/{id} [get]
 func (controller CustomerController) GetCustomer(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
+	fmt.Println(role)
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -78,9 +93,11 @@ func (controller CustomerController) GetCustomer(c *gin.Context) {
 // @Param customer body models.Customer true "Customer data"
 // @Success 200 {object} models.Customer
 // @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers [post]
 func (controller CustomerController) CreateCustomer(c *gin.Context) {
+	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -88,7 +105,7 @@ func (controller CustomerController) CreateCustomer(c *gin.Context) {
 	}
 
 	var customer models.Customer
-	err = c.ShouldBindJSON(&customer)
+	err = c.ShouldBind(&customer)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -117,6 +134,7 @@ func (controller CustomerController) CreateCustomer(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers/{id} [put]
 func (controller CustomerController) UpdateCustomer(c *gin.Context) {
+	// all user can access
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -130,7 +148,7 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 		return
 	}
 
-	err = c.ShouldBindJSON(&customer)
+	err = c.ShouldBind(&customer)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -156,6 +174,12 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers/{id} [delete]
 func (controller CustomerController) DeleteCustomer(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -190,6 +214,12 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers/search [get]
 func (controller CustomerController) SearchCustomers(c *gin.Context) {
+	_, role, err := utils.ExtractData(c)
+
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Only admin can Access"})
+		return
+	}
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
