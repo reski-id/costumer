@@ -59,6 +59,7 @@ func main() {
 	v1.GET("/products/search", productController.SearchProduct)
 
 	v1.POST("/orders", orderController.CreateOrder)
+	v1.POST("/multiorder", orderController.CreateOrderMulti)
 	v1.PUT("/orders/:id", orderController.UpdateOrder)
 	v1.DELETE("/orders/:id", orderController.DeleteOrder)
 	v1.GET("/orders", orderController.GetOrders)

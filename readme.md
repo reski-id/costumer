@@ -82,6 +82,7 @@ Customers
 | ------------- | -------------  | -----------                  
 | `GET`         | /api/v1/customers             | Get all customers      
 | `GET`         | /api/v1/customers/:id          | Get One customers      
+| `GET`         | /api/v1//customers/search       | Searching a customers      
 | `POST`        | /api/v1/customers              | Insert customers 
 | `PUT`         | /api/v1/customers/:id         | Update data customers
 | `DELETE`      | /api/v1/customers/:id         | Delete customers  
@@ -92,6 +93,7 @@ Products
 | ------------- | -------------  | -----------                  
 | `GET`         | /api/v1/products             | Get all products      
 | `GET`         | /api/v1/products/:id          | Get One products      
+| `GET`         | /api/v1//products/search          | Searching products      
 | `POST`        | /api/v1/products              | Insert products 
 | `PUT`         | /api/v1/products/:id         | Update data products
 | `DELETE`      | /api/v1/products/:id         | Delete products  
@@ -100,8 +102,11 @@ Orders
 | Methode       | End Point      | used for            
 | ------------- | -------------  | -----------                  
 | `GET`         | /api/v1/orders             | Get all orders      
+| `GET`         | /api/v1/myorder             | Get only my order   
 | `GET`         | /api/v1/orders/:id          | Get One orders      
-| `POST`        | /api/v1/orders              | Insert orders 
+| `GET`         | /api/v1//orders/search          | Search an orders      
+| `POST`        | /api/v1/orders              | Create orders 
+| `POST`        | /api/v1/multiorder              | Create multi order / batch order
 | `PUT`         | /api/v1/orders/:id         | Update data orders
 | `DELETE`      | /api/v1/orders/:id         | Delete orders  
 

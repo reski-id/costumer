@@ -124,6 +124,68 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, order)
 }
 
+// CreateOrderMulti godoc
+// @Summary Create multiple orders
+// @Description Create multiple orders
+// @Tags Order
+// @Accept  json
+// @Produce  json
+// @Param Authorization header string true "Bearer token"
+// @Param customerId path int true "Customer ID"
+// @Param productId formData []int true "Product IDs"
+// @Param quantity formData []int true "Quantities"
+// @Success 200 {object} []models.Order
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /ordermulti [post]
+func (controller OrderController) CreateOrderMulti(c *gin.Context) {
+	CustomerID, _, err := utils.ExtractData(c)
+	if CustomerID == -1 {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Silahkan Login Terlebih dahulu"})
+		return
+	}
+
+	db, err := utils.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "error Connect to Databases"})
+		return
+	}
+
+	var orderRequest struct {
+		ProductIDs []int `json:"productId" form:"productId" binding:"required"`
+		Quantities []int `json:"quantity" form:"quantity" binding:"required"`
+	}
+
+	if err := c.ShouldBind(&orderRequest); err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "error Bind"})
+		return
+	}
+
+	if len(orderRequest.ProductIDs) != len(orderRequest.Quantities) {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "productId and quantities length must match"})
+		return
+	}
+
+	var orders []models.Order
+	for i := 0; i < len(orderRequest.ProductIDs); i++ {
+		order := models.Order{
+			CustomerID:  CustomerID,
+			ProductID:   orderRequest.ProductIDs[i],
+			Quantity:    orderRequest.Quantities[i],
+			OrderStatus: "Pending",
+		}
+		orders = append(orders, order)
+	}
+
+	result := db.Create(&orders)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "error Create Order"})
+		return
+	}
+
+	c.JSON(http.StatusOK, orders)
+}
+
 // @Summary Update order
 // @Description Update an existing order
 // @Tags orders
