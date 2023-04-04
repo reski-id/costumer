@@ -101,14 +101,14 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error A": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error Connect to Databases": err.Error()})
 		return
 	}
 
 	var order models.Order
 	err = c.ShouldBind(&order)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error B": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error Error Bind": err.Error()})
 		return
 	}
 
@@ -117,7 +117,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 
 	result := db.Create(&order)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error C": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error Create Order": result.Error.Error()})
 		return
 	}
 
