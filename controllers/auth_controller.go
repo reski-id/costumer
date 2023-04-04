@@ -16,9 +16,11 @@ type AuthController struct{}
 // @Summary Login to the system
 // @Description Login to the system with username and password
 // @Tags Auth
-// @Accept json
+// @Accept json, multipart/form-data
 // @Produce json
 // @Param loginData body models.LoginData true "Login Data"
+// @Param username formData string true "Username"
+// @Param password formData string true "Password"
 // @Success 200 {object} models.TokenResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
@@ -27,7 +29,7 @@ type AuthController struct{}
 func (auth *AuthController) Login(c *gin.Context) {
 	var loginData models.LoginData
 	if err := c.ShouldBind(&loginData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -79,7 +81,7 @@ func (auth *AuthController) Login(c *gin.Context) {
 func (auth *AuthController) Register(c *gin.Context) {
 	var registrationData models.User
 	if err := c.ShouldBind(&registrationData); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -92,7 +94,7 @@ func (auth *AuthController) Register(c *gin.Context) {
 	var existingUser models.User
 	result := db.Where("username = ?", registrationData.Username).First(&existingUser)
 	if result.Error == nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Username already exists"})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Username already exists"})
 		return
 	}
 

@@ -12,19 +12,19 @@ import (
 
 type CustomerController struct{}
 
-// GetCustomers godoc
-// @Summary Get all customers
-// @Description Get all customers in the database
-// @Tags Customer
+// @Summary Get a list of customers
+// @Description Get a list of customers, paginated by `page` and `limit` query parameters
+// @Tags Customers
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
-// @Param page query integer false "Page number for pagination (default: 1)"
-// @Param limit query integer false "Number of items per page (default: 10)"
+// @Param Authorization header string true "Bearer {token}"
+// @Param page query integer false "Page number (default 1)"
+// @Param limit query integer false "Number of customers per page (default 10)"
 // @Success 200 {array} models.Customer
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
-// @Router /api/v1/customers [get]
+// @Router /customers [get]
 func (controller CustomerController) GetCustomers(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -53,6 +53,19 @@ func (controller CustomerController) GetCustomers(c *gin.Context) {
 	c.JSON(http.StatusOK, customers)
 }
 
+// @Summary Get a customer
+// @Description Get a single customer by ID
+// @Tags Customers
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param id path int true "Customer ID"
+// @Success 200 {object} models.Customer
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /customers/{id} [get]
 func (controller CustomerController) GetCustomer(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -76,6 +89,16 @@ func (controller CustomerController) GetCustomer(c *gin.Context) {
 	c.JSON(http.StatusOK, customer)
 }
 
+// @Summary Create a customer
+// @Description Create a new customer
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param customer body models.Customer true "Customer object"
+// @Success 200 {object} models.Customer
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /customers [post]
 func (controller CustomerController) CreateCustomer(c *gin.Context) {
 	// all user can access
 	db, err := utils.Connect()
@@ -147,6 +170,7 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 // @Summary Delete a customer by ID
 // @Description Delete a customer by ID
 // @Tags Customers
+// @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Customer ID"
 // @Produce json
 // @Success 200 {object} models.ErrorResponse
@@ -188,6 +212,7 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 // @Tags Customers
 // @Accept json
 // @Produce json
+// @Param Authorization header string true "Bearer {token}"
 // @Param query query string true "Search query"
 // @Success 200 {object} []models.Customer
 // @Failure 400 {object} models.ErrorResponse

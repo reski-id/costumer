@@ -171,6 +171,17 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, order)
 }
 
+// @Summary Delete an order
+// @Description Delete an order by ID
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param id path int true "Order ID"
+// @Success 200 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /orders/{id} [delete]
 func (controller OrderController) DeleteOrder(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -200,6 +211,18 @@ func (controller OrderController) DeleteOrder(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Order deleted"})
 }
 
+// @Summary Search orders
+// @Description Search for orders by customer ID
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param query query string true "Customer ID"
+// @Param page query int false "Page number (default: 1)"
+// @Param limit query int false "Number of items to retrieve per page (default: 10)"
+// @Success 200 {array} models.Order
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /orders/search [get]
 func (controller OrderController) SearchOrders(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -225,6 +248,16 @@ func (controller OrderController) SearchOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, orders)
 }
 
+// @Summary Get my orders
+// @Description Retrieve a list of orders placed by the authenticated user
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Order
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Security BearerAuth
+// @Router /myorder [get]
 func (controller OrderController) GetMyOrders(c *gin.Context) {
 	userID, _, err := utils.ExtractData(c)
 	if err != nil {

@@ -11,6 +11,18 @@ import (
 
 type ProductController struct{}
 
+// @Summary Create a new product
+// @Description Create a new product with the specified details
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param product body models.Product true "Product details"
+// @Success 201 {object} models.Product
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products [post]
 func (controller ProductController) CreateProduct(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -37,6 +49,18 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, product)
 }
 
+// GetProducts godoc
+// @Summary Get a list of products
+// @Description Get a list of products with pagination support
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number (default 1)"
+// @Param limit query int false "Number of items per page (default 10)"
+// @Success 200 {object} models.ProductsResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products [get]
 func (controller ProductController) GetProducts(c *gin.Context) {
 	// all user can access
 	db, err := utils.Connect()
@@ -78,6 +102,17 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
+// @Summary Get a product by ID
+// @Description Retrieve a product by ID
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param id path int true "Product ID"
+// @Success 200 {object} models.Product
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products/{id} [get]
 func (controller ProductController) GetProduct(c *gin.Context) {
 	// all user can access
 	db, err := utils.Connect()
@@ -95,6 +130,22 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, product)
 }
 
+// UpdateProduct updates an existing product
+// Only admin can update a product
+// @Summary Update a product
+// @Description Update a product with the specified ID
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param id path int true "Product ID"
+// @Param product body models.Product true "Product details"
+// @Success 200 {object} models.Product
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products/{id} [put]
 func (controller ProductController) UpdateProduct(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -127,6 +178,21 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, product)
 }
 
+// DeleteProduct deletes an existing product
+// Only admin can delete a product
+// @Summary Delete a product
+// @Description Delete a product with the specified ID
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer {token}"
+// @Param id path int true "Product ID"
+// @Success 200 {object} models.ErrorResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products/{id} [delete]
 func (controller ProductController) DeleteProduct(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
@@ -165,6 +231,16 @@ func (controller ProductController) DeleteProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, models.ErrorResponse{Error: "Product deleted successfully"})
 }
 
+// SearchProduct searches for products with a matching name
+// @Summary Search products
+// @Description Search products with a matching name
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param query query string true "Search query"
+// @Success 200 {array} models.Product
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products/search [get]
 func (controller ProductController) SearchProduct(c *gin.Context) {
 
 	db, err := utils.Connect()
