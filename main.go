@@ -57,6 +57,7 @@ func main() {
 	v1.PUT("/orders/:id", orderController.UpdateOrder)
 	v1.DELETE("/orders/:id", orderController.DeleteOrder)
 	v1.GET("/orders", orderController.GetOrders)
+	v1.GET("/myorder", orderController.GetMyOrders)
 	v1.GET("/orders/:id", orderController.GetOrder)
 
 	router.Run(":8080")
