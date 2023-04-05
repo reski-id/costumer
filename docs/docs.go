@@ -463,7 +463,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Order"
+                    "orders"
                 ],
                 "summary": "Create multiple orders",
                 "parameters": [

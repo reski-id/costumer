@@ -127,7 +127,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 // CreateOrderMulti godoc
 // @Summary Create multiple orders
 // @Description Create multiple orders
-// @Tags Order
+// @Tags orders
 // @Accept  json
 // @Produce  json
 // @Param Authorization header string true "Bearer token"
