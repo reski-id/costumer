@@ -79,49 +79,63 @@ func (auth *AuthController) Login(c *gin.Context) {
 // @Failure 500 {object} models.ErrorResponse
 // @Router /register [post]
 func (auth *AuthController) Register(c *gin.Context) {
-	var registrationData models.User
-	if err := c.ShouldBind(&registrationData); err != nil {
+	db, err := utils.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	var customer models.User
+	err = c.ShouldBind(&customer)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	db, err := utils.Connect()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Database connection error"})
-		return
-	}
-
+	//cek
 	var existingUser models.User
-	result := db.Where("username = ?", registrationData.Username).First(&existingUser)
-	if result.Error == nil {
+	checkUsername := db.Where("username = ?", customer.Username).First(&existingUser)
+	if checkUsername.Error == nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Username already exists"})
 		return
 	}
+	checkEmail := db.Where("email = ?", customer.Email).First(&existingUser)
+	if checkEmail.Error == nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Email already exists"})
+		return
+	}
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(registrationData.Password), bcrypt.DefaultCost)
+	customer.Role = "user"
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(customer.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Password hashing error"})
 		return
 	}
 
-	newUser := models.User{Fullname: registrationData.Fullname, Username: registrationData.Username, Password: string(hash), Email: registrationData.Email, Role: registrationData.Role}
-	result = db.Create(&newUser)
+	newCustomer := models.User{
+		Fullname:    customer.Fullname,
+		Username:    customer.Username,
+		Password:    string(hash),
+		Email:       customer.Email,
+		PhoneNumber: customer.PhoneNumber,
+		Address:     customer.Address,
+		Role:        customer.Role}
+
+	result := db.Create(&newCustomer)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "User creation error"})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 
-	token, err := utils.GenerateToken(int(newUser.ID), newUser.Role)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Token generation error"})
-		return
-	}
-
-	response := models.TokenResponse{
-		Username: newUser.Username,
-		Email:    newUser.Email,
-		Role:     newUser.Role,
-		Token:    token,
+	response := models.CreateUserResponse{
+		Fullname:    newCustomer.Fullname,
+		Username:    newCustomer.Username,
+		Password:    customer.Password,
+		Email:       newCustomer.Email,
+		Role:        newCustomer.Role,
+		PhoneNumber: newCustomer.PhoneNumber,
+		Address:     newCustomer.Address,
 	}
 
 	c.JSON(http.StatusOK, response)
