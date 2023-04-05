@@ -1,25 +1,21 @@
 basePath: /api/v1
 definitions:
-  models.Customer:
+  models.CreateUserResponse:
     properties:
       address:
         type: string
-      createdAt:
-        type: string
       email:
         type: string
-      id:
-        type: integer
-      name:
+      fullname:
+        type: string
+      password:
         type: string
       phoneNumber:
         type: string
-      updatedAt:
+      role:
         type: string
-    required:
-    - email
-    - name
-    - phoneNumber
+      username:
+        type: string
     type: object
   models.ErrorResponse:
     properties:
@@ -106,15 +102,19 @@ definitions:
     type: object
   models.User:
     properties:
+      address:
+        type: string
       createdAt:
         type: string
       email:
         type: string
+      fullname:
+        type: string
       id:
         type: integer
-      name:
-        type: string
       password:
+        type: string
+      phoneNumber:
         type: string
       role:
         type: string
@@ -124,9 +124,8 @@ definitions:
         type: string
     required:
     - email
-    - name
+    - fullname
     - password
-    - role
     - username
     type: object
 host: localhost:8080
@@ -163,7 +162,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Customer'
+              $ref: '#/definitions/models.User'
             type: array
         "401":
           description: Unauthorized
@@ -188,14 +187,14 @@ paths:
         name: customer
         required: true
         schema:
-          $ref: '#/definitions/models.Customer'
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Customer'
+            $ref: '#/definitions/models.CreateUserResponse'
         "400":
           description: Bad Request
           schema:
@@ -260,7 +259,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Customer'
+            $ref: '#/definitions/models.User'
         "401":
           description: Unauthorized
           schema:
@@ -293,14 +292,14 @@ paths:
         name: customer
         required: true
         schema:
-          $ref: '#/definitions/models.Customer'
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Customer'
+            $ref: '#/definitions/models.User'
         "400":
           description: Bad Request
           schema:
@@ -339,7 +338,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Customer'
+              $ref: '#/definitions/models.User'
             type: array
         "400":
           description: Bad Request
@@ -424,6 +423,56 @@ paths:
       summary: Get my orders
       tags:
       - orders
+  /ordermulti:
+    post:
+      consumes:
+      - application/json
+      description: Create multiple orders
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Customer ID
+        in: path
+        name: customerId
+        required: true
+        type: integer
+      - description: Product IDs
+        in: formData
+        items:
+          type: integer
+        name: productId
+        required: true
+        type: array
+      - description: Quantities
+        in: formData
+        items:
+          type: integer
+        name: quantity
+        required: true
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Create multiple orders
+      tags:
+      - Order
   /orders:
     get:
       consumes:

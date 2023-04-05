@@ -25,9 +25,9 @@ func SeedUsers() {
 
 	// create some users
 	users := []models.User{
-		{Username: "john_doe", Password: "password1", Role: "user", Email: "jhon@gmail.com", Name: "Jhon"},
-		{Username: "jane_doe", Password: "password2", Role: "admin", Email: "adm@gmail.com", Name: "Jhane"},
-		{Username: "bob_smith", Password: "password3", Role: "user", Email: "bob@gmail.com", Name: "Bob"},
+		{Username: "john_doe", Password: "password1", Role: "user", Email: "jhon@gmail.com", Fullname: "Jhon Doe", Address: "", PhoneNumber: ""},
+		{Username: "jane_doe", Password: "password2", Role: "admin", Email: "adm@gmail.com", Fullname: "Jane Doe", Address: "", PhoneNumber: ""},
+		{Username: "bob_smith", Password: "password3", Role: "user", Email: "bob@gmail.com", Fullname: "Bob Smith", Address: "", PhoneNumber: ""},
 	}
 
 	for i := range users {
@@ -39,34 +39,6 @@ func SeedUsers() {
 	}
 
 	log.Println("users seeded")
-}
-
-func SeedCustomers() {
-	db, err := utils.Connect()
-	if err != nil {
-		panic("Failed to connect to database!")
-	}
-
-	// check if any customer already exists in the database
-	var customer models.Customer
-	if db.First(&customer).Error == nil {
-		log.Println("customers already seeded")
-		return
-	}
-
-	// create some sample customers
-	customers := []models.Customer{
-		{Name: "John Doe", Email: "john.doe@example.com", PhoneNumber: "1234567890", Address: "123 Main St"},
-		{Name: "Jane Smith", Email: "jane.smith@example.com", PhoneNumber: "0987654321", Address: "456 Elm St"},
-	}
-
-	// insert customers into the database
-	for _, c := range customers {
-		result := db.Create(&c)
-		if result.Error != nil {
-			panic("Failed to insert customer!")
-		}
-	}
 }
 
 func SeedProducts() {

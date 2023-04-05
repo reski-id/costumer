@@ -13,5 +13,5 @@ func CreateMigration() {
 	}
 
 	// Auto migrate all entities
-	db.AutoMigrate(&models.Customer{}, &models.User{}, &models.Order{}, &models.Product{})
+	db.AutoMigrate(&models.User{}, &models.Order{}, &models.Product{})
 }

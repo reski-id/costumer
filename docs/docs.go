@@ -61,7 +61,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Customer"
+                                "$ref": "#/definitions/models.User"
                             }
                         }
                     },
@@ -98,7 +98,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Customer"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
@@ -106,7 +106,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Customer"
+                            "$ref": "#/definitions/models.CreateUserResponse"
                         }
                     },
                     "400": {
@@ -159,7 +159,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Customer"
+                                "$ref": "#/definitions/models.User"
                             }
                         }
                     },
@@ -216,7 +216,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Customer"
+                            "$ref": "#/definitions/models.User"
                         }
                     },
                     "401": {
@@ -265,7 +265,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Customer"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
@@ -273,7 +273,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Customer"
+                            "$ref": "#/definitions/models.User"
                         }
                     },
                     "400": {
@@ -428,6 +428,80 @@ const docTemplate = `{
                     "orders"
                 ],
                 "summary": "Get my orders",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Order"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/ordermulti": {
+            "post": {
+                "description": "Create multiple orders",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Create multiple orders",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Customer ID",
+                        "name": "customerId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Product IDs",
+                        "name": "productId",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "Quantities",
+                        "name": "quantity",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1128,33 +1202,28 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Customer": {
+        "models.CreateUserResponse": {
             "type": "object",
-            "required": [
-                "email",
-                "name",
-                "phoneNumber"
-            ],
             "properties": {
                 "address": {
-                    "type": "string"
-                },
-                "createdAt": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
+                "fullname": {
+                    "type": "string"
                 },
-                "name": {
+                "password": {
                     "type": "string"
                 },
                 "phoneNumber": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "role": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
@@ -1288,25 +1357,30 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "email",
-                "name",
+                "fullname",
                 "password",
-                "role",
                 "username"
             ],
             "properties": {
+                "address": {
+                    "type": "string"
+                },
                 "createdAt": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
+                "fullname": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "password": {
                     "type": "string"
                 },
-                "password": {
+                "phoneNumber": {
                     "type": "string"
                 },
                 "role": {

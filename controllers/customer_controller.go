@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CustomerController struct{}
@@ -21,7 +22,7 @@ type CustomerController struct{}
 // @Param Authorization header string true "Bearer {token}"
 // @Param page query integer false "Page number (default 1)"
 // @Param limit query integer false "Number of customers per page (default 10)"
-// @Success 200 {array} models.Customer
+// @Success 200 {array} models.User
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers [get]
@@ -39,7 +40,7 @@ func (controller CustomerController) GetCustomers(c *gin.Context) {
 		return
 	}
 
-	var customers []models.Customer
+	var customers []models.User
 	page, _ := strconv.Atoi(c.Query("page"))
 	limit, _ := strconv.Atoi(c.Query("limit"))
 	offset := (page - 1) * limit
@@ -61,7 +62,7 @@ func (controller CustomerController) GetCustomers(c *gin.Context) {
 // @Produce json
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Customer ID"
-// @Success 200 {object} models.Customer
+// @Success 200 {object} models.User
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
@@ -79,7 +80,7 @@ func (controller CustomerController) GetCustomer(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
-	var customer models.Customer
+	var customer models.User
 	result := db.First(&customer, c.Param("id"))
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Customer not found"})
@@ -94,8 +95,8 @@ func (controller CustomerController) GetCustomer(c *gin.Context) {
 // @Tags Customers
 // @Accept json
 // @Produce json
-// @Param customer body models.Customer true "Customer object"
-// @Success 200 {object} models.Customer
+// @Param customer body models.User true "Customer object"
+// @Success 200 {object} models.CreateUserResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers [post]
@@ -107,20 +108,60 @@ func (controller CustomerController) CreateCustomer(c *gin.Context) {
 		return
 	}
 
-	var customer models.Customer
+	var customer models.User
 	err = c.ShouldBind(&customer)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	result := db.Create(&customer)
+	//cek
+	var existingUser models.User
+	checkUsername := db.Where("username = ?", customer.Username).First(&existingUser)
+	if checkUsername.Error == nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Username already exists"})
+		return
+	}
+	checkEmail := db.Where("email = ?", customer.Email).First(&existingUser)
+	if checkEmail.Error == nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Email already exists"})
+		return
+	}
+
+	customer.Role = "user"
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(customer.Password), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Password hashing error"})
+		return
+	}
+
+	newCustomer := models.User{
+		Fullname:    customer.Fullname,
+		Username:    customer.Username,
+		Password:    string(hash),
+		Email:       customer.Email,
+		PhoneNumber: customer.PhoneNumber,
+		Address:     customer.Address,
+		Role:        customer.Role}
+
+	result := db.Create(&newCustomer)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, customer)
+	response := models.CreateUserResponse{
+		Fullname:    newCustomer.Fullname,
+		Username:    newCustomer.Username,
+		Password:    customer.Password,
+		Email:       newCustomer.Email,
+		Role:        newCustomer.Role,
+		PhoneNumber: newCustomer.PhoneNumber,
+		Address:     newCustomer.Address,
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 // UpdateCustomer godoc
@@ -130,8 +171,8 @@ func (controller CustomerController) CreateCustomer(c *gin.Context) {
 // @Param id path int true "Customer ID"
 // @Accept json
 // @Produce json
-// @Param customer body models.Customer true "Customer data"
-// @Success 200 {object} models.Customer
+// @Param customer body models.User true "Customer data"
+// @Success 200 {object} models.User
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
@@ -144,7 +185,7 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 		return
 	}
 
-	var customer models.Customer
+	var customer models.User
 	result := db.First(&customer, c.Param("id"))
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Customer not found"})
@@ -190,7 +231,7 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 		return
 	}
 
-	var customer models.Customer
+	var customer models.User
 	result := db.First(&customer, c.Param("id"))
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Customer not found"})
@@ -214,7 +255,7 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 // @Produce json
 // @Param Authorization header string true "Bearer {token}"
 // @Param query query string true "Search query"
-// @Success 200 {object} []models.Customer
+// @Success 200 {object} []models.User
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers/search [get]
@@ -231,7 +272,7 @@ func (controller CustomerController) SearchCustomers(c *gin.Context) {
 		return
 	}
 
-	var customers []models.Customer
+	var customers []models.User
 	query := "%" + c.Query("query") + "%"
 
 	result := db.Where("name LIKE ?", query).Find(&customers)
