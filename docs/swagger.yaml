@@ -472,7 +472,7 @@ paths:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Create multiple orders
       tags:
-      - Order
+      - orders
   /orders:
     get:
       consumes:
