@@ -104,7 +104,7 @@ func (auth *AuthController) Register(c *gin.Context) {
 		return
 	}
 
-	newUser := models.User{Name: registrationData.Name, Username: registrationData.Username, Password: string(hash), Email: registrationData.Email, Role: registrationData.Role}
+	newUser := models.User{Fullname: registrationData.Fullname, Username: registrationData.Username, Password: string(hash), Email: registrationData.Email, Role: registrationData.Role}
 	result = db.Create(&newUser)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "User creation error"})

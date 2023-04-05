@@ -25,7 +25,6 @@ func main() {
 	//migrate and seeder
 	seed.CreateMigration()
 	seed.SeedUsers()
-	seed.SeedCustomers()
 	seed.SeedProducts()
 
 	router := gin.Default()
