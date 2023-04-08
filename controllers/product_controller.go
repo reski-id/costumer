@@ -16,6 +16,7 @@ type ProductController struct{}
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param product body models.Product true "Product details"
 // @Success 201 {object} models.Product
@@ -107,6 +108,7 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
 // @Success 200 {object} models.Product
@@ -137,6 +139,7 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
 // @Param product body models.Product true "Product details"
@@ -185,6 +188,7 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 // @Tags products
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
 // @Success 200 {object} models.ErrorResponse

@@ -36,20 +36,16 @@ definitions:
     type: object
   models.Order:
     properties:
-      createdAt:
-        type: string
       customerId:
         type: integer
       id:
-        type: integer
+        type: string
       orderStatus:
         type: string
       productId:
         type: integer
       quantity:
         type: integer
-      updatedAt:
-        type: string
     required:
     - customerId
     - productId
@@ -235,6 +231,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete a customer by ID
       tags:
       - Customers
@@ -348,6 +346,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Search customers by name
       tags:
       - Customers
@@ -401,6 +401,12 @@ paths:
       consumes:
       - application/json
       description: Retrieve a list of orders placed by the authenticated user
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -419,8 +425,56 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       security:
+      - ApiKeyAuth: []
       - BearerAuth: []
       summary: Get my orders
+      tags:
+      - orders
+  /myorder/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing order placed by the authenticated user
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Order object
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Update my order
       tags:
       - orders
   /ordermulti:
@@ -470,6 +524,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create multiple orders
       tags:
       - orders
@@ -479,6 +535,11 @@ paths:
       - application/json
       description: Retrieve a list of orders
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: 'Page number (default: 1)'
         in: query
         name: page
@@ -500,6 +561,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get orders
       tags:
       - orders
@@ -508,6 +571,11 @@ paths:
       - application/json
       description: Create a new order
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Order object
         in: body
         name: order
@@ -529,6 +597,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create order
       tags:
       - orders
@@ -538,6 +608,11 @@ paths:
       - application/json
       description: Delete an order by ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Order ID
         in: path
         name: id
@@ -562,6 +637,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete an order
       tags:
       - orders
@@ -570,6 +647,11 @@ paths:
       - application/json
       description: Retrieve an order by ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Order ID
         in: path
         name: id
@@ -590,6 +672,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get order
       tags:
       - orders
@@ -598,6 +682,11 @@ paths:
       - application/json
       description: Update an existing order
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Order ID
         in: path
         name: id
@@ -628,6 +717,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update order
       tags:
       - orders
@@ -637,6 +728,11 @@ paths:
       - application/json
       description: Search for orders by customer ID
       parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Customer ID
         in: query
         name: query
@@ -667,6 +763,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Search orders
       tags:
       - orders
@@ -737,6 +835,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create a new product
       tags:
       - products
@@ -779,6 +879,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete a product
       tags:
       - products
@@ -812,6 +914,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get a product by ID
       tags:
       - products
@@ -859,6 +963,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update a product
       tags:
       - products

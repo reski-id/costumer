@@ -103,6 +103,7 @@ Orders
 | ------------- | -------------  | -----------                  
 | `GET`         | /api/v1/orders             | Get all orders      
 | `GET`         | /api/v1/myorder             | Get only my order   
+| `PUT`         | /api/v1/myorder/:id                 | Update my order   
 | `GET`         | /api/v1/orders/:id          | Get One orders      
 | `GET`         | /api/v1//orders/search          | Search an orders      
 | `POST`        | /api/v1/orders              | Create orders 
@@ -125,12 +126,14 @@ This software uses the following Tech:
 - [Gin Framework](https://gin-gonic.com/)
 - [Gorm](https://gorm.io/index.html)
 - [OpenAPI Swaggo](https://github.com/swaggo/gin-swagger)
+- [UUID](github.com/google/uuid)
 - [mysql](https://www.mysql.com/)
 - [Linux](https://www.linux.com/)
 - [Docker](https://www.docker.com/)
 - [Dockerhub](https://hub.docker.com/u/programmerreski)
 - [Git Repository](https://github.com/reski-id)
 - [Trunk Base Development](https://trunkbaseddevelopment.com/)
+
 
 ## 📱 Contact me
 feel free to contact me ... 

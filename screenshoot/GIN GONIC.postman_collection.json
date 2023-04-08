@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1bf818a0-c56c-4b8c-bbff-adee565ab4a3",
+		"_postman_id": "f07189e1-c145-437f-baa8-302202fd657c",
 		"name": "GIN GONIC",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "21893722"
@@ -15,7 +15,7 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "name",
+							"key": "fullname",
 							"value": "Ahmad Reski",
 							"type": "text"
 						},
@@ -26,7 +26,7 @@
 						},
 						{
 							"key": "password",
-							"value": "reski1234",
+							"value": "12345",
 							"type": "text"
 						},
 						{
@@ -71,7 +71,7 @@
 						},
 						{
 							"key": "password",
-							"value": "reski1234",
+							"value": "12345",
 							"type": "text"
 						}
 					]
@@ -94,29 +94,54 @@
 		{
 			"name": "costumer create",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "name",
+							"key": "fullname",
 							"value": "testingcostumer",
 							"type": "text"
 						},
 						{
-							"key": "address",
-							"value": "testing address",
+							"key": "username",
+							"value": "testing1",
 							"type": "text"
 						},
 						{
-							"key": "phoneNumber",
-							"value": "0812121212",
+							"key": "password",
+							"value": "124544",
 							"type": "text"
 						},
 						{
 							"key": "email",
-							"value": "testing@gmail.com",
+							"value": "testing1@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "6781212",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "asasasasas",
 							"type": "text"
 						}
 					]
@@ -137,8 +162,88 @@
 			"response": []
 		},
 		{
+			"name": "register",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "fullname",
+							"value": "testingcostumer",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "reski11",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "124544",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "testingrr@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "6781212",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "asasasasas",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "costumer update",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
@@ -185,6 +290,16 @@
 		{
 			"name": "costumer delete",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -307,7 +422,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -345,7 +460,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -381,6 +496,16 @@
 		{
 			"name": "product create",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -441,7 +566,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Nywicm9sZSI6ImFkbWluIn0.kYIKJZyV3yhTy5Z9hoHbb20anoVz39Shliqc8YpArlg",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -487,7 +612,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Nywicm9sZSI6ImFkbWluIn0.kYIKJZyV3yhTy5Z9hoHbb20anoVz39Shliqc8YpArlg",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -546,7 +671,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0LCJpc19hZG1pbiI6ZmFsc2UsImV4cCI6MTY3OTM4NTYwOX0.cpd16hFb92SK2gq2eYqOqDlDmkwTCU8JbAn1eiVD8RU",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -610,7 +735,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -741,6 +866,50 @@
 			"response": []
 		},
 		{
+			"name": "order by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "quantity",
+							"value": "4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/orders/0c4f8590-0bf5-4435-afb5-565db54f43d7",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"0c4f8590-0bf5-4435-afb5-565db54f43d7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "myorders",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -751,7 +920,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Niwicm9sZSI6InVzZXIifQ.jnoApCwqdLMRho0CYMD5nMPkDlKMHBP5izNVTUciIBI",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -799,50 +968,37 @@
 			"response": []
 		},
 		{
-			"name": "updatemyOrder",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
+			"name": "updatemyorders",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Niwicm9sZSI6InVzZXIifQ.jnoApCwqdLMRho0CYMD5nMPkDlKMHBP5izNVTUciIBI",
+							"value": "",
 							"type": "string"
 						}
 					]
 				},
-				"method": "GET",
+				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "name",
-							"value": "testingcostumer",
+							"key": "productId",
+							"value": "4",
 							"type": "text"
 						},
 						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
+							"key": "quantity",
+							"value": "1",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/myorder",
+					"raw": "localhost:8080/api/v1/myorder/5f2b7e77-f653-44b3-9e44-7f258c1c5f99",
 					"host": [
 						"localhost"
 					],
@@ -850,7 +1006,43 @@
 					"path": [
 						"api",
 						"v1",
-						"myorder"
+						"myorder",
+						"5f2b7e77-f653-44b3-9e44-7f258c1c5f99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateorderbyadmin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/orders/0c4f8590-0bf5-4435-afb5-565db54f43d7",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"0c4f8590-0bf5-4435-afb5-565db54f43d7"
 					]
 				}
 			},
@@ -867,7 +1059,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -903,31 +1095,45 @@
 		{
 			"name": "orders multi",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "customerId",
-							"value": "74d186de-c6fd-11ed-afa1-0242ac120002",
-							"type": "text",
-							"disabled": true
-						},
-						{
-							"key": "name",
-							"value": "laptop",
+							"key": "productId",
+							"value": "1",
 							"type": "text"
 						},
 						{
 							"key": "quantity",
 							"value": "3",
 							"type": "text"
+						},
+						{
+							"key": "productId",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "2",
+							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/ordermulti",
+					"raw": "localhost:8080/api/v1/multiorder",
 					"host": [
 						"localhost"
 					],
@@ -935,7 +1141,7 @@
 					"path": [
 						"api",
 						"v1",
-						"ordermulti"
+						"multiorder"
 					]
 				}
 			},
@@ -949,7 +1155,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Niwicm9sZSI6InVzZXIifQ.jnoApCwqdLMRho0CYMD5nMPkDlKMHBP5izNVTUciIBI",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -994,7 +1200,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6Nywicm9sZSI6ImFkbWluIn0.kYIKJZyV3yhTy5Z9hoHbb20anoVz39Shliqc8YpArlg",
+							"value": "",
 							"type": "string"
 						}
 					]
@@ -1008,11 +1214,21 @@
 							"key": "orderStatus",
 							"value": "Success",
 							"type": "text"
+						},
+						{
+							"key": "productId",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "5",
+							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "localhost:8080/api/v1/orders/8",
+					"raw": "localhost:8080/api/v1/orders/9d5b41d3-0ddb-461c-8312-e8997d5dd51a",
 					"host": [
 						"localhost"
 					],
@@ -1021,7 +1237,7 @@
 						"api",
 						"v1",
 						"orders",
-						"8"
+						"9d5b41d3-0ddb-461c-8312-e8997d5dd51a"
 					],
 					"query": [
 						{

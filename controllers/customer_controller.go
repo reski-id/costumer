@@ -211,6 +211,7 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 // @Summary Delete a customer by ID
 // @Description Delete a customer by ID
 // @Tags Customers
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Customer ID"
 // @Produce json
@@ -251,6 +252,7 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 // @Summary Search customers by name
 // @Description Search customers by name
 // @Tags Customers
+// @Security ApiKeyAuth
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "Bearer {token}"
