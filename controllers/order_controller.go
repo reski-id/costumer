@@ -3,8 +3,10 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 
 	"costumer/models"
 	"costumer/utils"
@@ -63,9 +65,10 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 	_, role, err := utils.ExtractData(c)
 
 	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can Access"})
+		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Only admin can access"})
 		return
 	}
+
 	db, err := utils.Connect()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
@@ -73,7 +76,13 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 	}
 
 	var order models.Order
-	result := db.First(&order, c.Param("id"))
+	orderID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Invalid order ID"})
+		return
+	}
+
+	result := db.Where("id = ?", orderID).First(&order)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Order not found"})
 		return
@@ -111,6 +120,10 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error Error Bind": err.Error()})
 		return
 	}
+
+	// order.ID = uuid.New() //2c5d88f7-a8b4-4dda-a11a-dce64cddb9e7
+	id := uuid.New().String()
+	order.ID = strings.ReplaceAll(id, "-", "") //2c5d88f7a8b44ddaa11adce64cddb9e7
 
 	order.CustomerID = CustomerID
 	order.OrderStatus = "Pending"

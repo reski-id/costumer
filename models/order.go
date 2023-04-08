@@ -1,7 +1,7 @@
 package models
 
 type Order struct {
-	Model
+	ID          string `json:"id" form:"id"`
 	CustomerID  int    `json:"customerId" form:"customerId" validate:"required"`
 	ProductID   int    `json:"productId" form:"productId" validate:"required"`
 	Quantity    int    `json:"quantity" form:"quantity" validate:"required"`
