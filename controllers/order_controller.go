@@ -3,7 +3,6 @@ package controllers
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -121,9 +120,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// order.ID = uuid.New() //2c5d88f7-a8b4-4dda-a11a-dce64cddb9e7
-	id := uuid.New().String()
-	order.ID = strings.ReplaceAll(id, "-", "") //2c5d88f7a8b44ddaa11adce64cddb9e7
+	order.ID = uuid.New() //2c5d88f7-a8b4-4dda-a11a-dce64cddb9e7
 
 	order.CustomerID = CustomerID
 	order.OrderStatus = "Pending"
