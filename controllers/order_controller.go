@@ -179,6 +179,7 @@ func (controller OrderController) CreateOrderMulti(c *gin.Context) {
 	var orders []models.Order
 	for i := 0; i < len(orderRequest.ProductIDs); i++ {
 		order := models.Order{
+			ID:          uuid.New(),
 			CustomerID:  CustomerID,
 			ProductID:   orderRequest.ProductIDs[i],
 			Quantity:    orderRequest.Quantities[i],
