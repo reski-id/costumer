@@ -126,6 +126,11 @@ const docTemplate = `{
         },
         "/customers/search": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Search customers by name",
                 "consumes": [
                     "application/json"
@@ -297,6 +302,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete a customer by ID",
                 "produces": [
                     "application/json"
@@ -414,6 +424,9 @@ const docTemplate = `{
             "get": {
                 "security": [
                     {
+                        "ApiKeyAuth": []
+                    },
+                    {
                         "BearerAuth": []
                     }
                 ],
@@ -465,6 +478,9 @@ const docTemplate = `{
         "/myorder/{id}": {
             "put": {
                 "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
                     {
                         "BearerAuth": []
                     }
@@ -535,6 +551,11 @@ const docTemplate = `{
         },
         "/ordermulti": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create multiple orders",
                 "consumes": [
                     "application/json"
@@ -609,6 +630,11 @@ const docTemplate = `{
         },
         "/orders": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve a list of orders",
                 "consumes": [
                     "application/json"
@@ -660,6 +686,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create a new order",
                 "consumes": [
                     "application/json"
@@ -713,6 +744,11 @@ const docTemplate = `{
         },
         "/orders/search": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Search for orders by customer ID",
                 "consumes": [
                     "application/json"
@@ -779,6 +815,11 @@ const docTemplate = `{
         },
         "/orders/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve an order by ID",
                 "consumes": [
                     "application/json"
@@ -828,6 +869,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update an existing order",
                 "consumes": [
                     "application/json"
@@ -892,6 +938,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete an order by ID",
                 "consumes": [
                     "application/json"
@@ -996,6 +1047,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Create a new product with the specified details",
                 "consumes": [
                     "application/json"
@@ -1096,6 +1152,11 @@ const docTemplate = `{
         },
         "/products/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Retrieve a product by ID",
                 "consumes": [
                     "application/json"
@@ -1145,6 +1206,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update a product with the specified ID",
                 "consumes": [
                     "application/json"
@@ -1215,6 +1281,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete a product with the specified ID",
                 "consumes": [
                     "application/json"

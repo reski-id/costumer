@@ -231,6 +231,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete a customer by ID
       tags:
       - Customers
@@ -344,6 +346,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Search customers by name
       tags:
       - Customers
@@ -421,6 +425,7 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       security:
+      - ApiKeyAuth: []
       - BearerAuth: []
       summary: Get my orders
       tags:
@@ -467,6 +472,7 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       security:
+      - ApiKeyAuth: []
       - BearerAuth: []
       summary: Update my order
       tags:
@@ -518,6 +524,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create multiple orders
       tags:
       - orders
@@ -553,6 +561,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get orders
       tags:
       - orders
@@ -587,6 +597,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create order
       tags:
       - orders
@@ -625,6 +637,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete an order
       tags:
       - orders
@@ -658,6 +672,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get order
       tags:
       - orders
@@ -701,6 +717,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update order
       tags:
       - orders
@@ -745,6 +763,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Search orders
       tags:
       - orders
@@ -815,6 +835,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create a new product
       tags:
       - products
@@ -857,6 +879,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete a product
       tags:
       - products
@@ -890,6 +914,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get a product by ID
       tags:
       - products
@@ -937,6 +963,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Update a product
       tags:
       - products

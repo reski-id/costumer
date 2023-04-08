@@ -18,6 +18,7 @@ type OrderController struct{}
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param page query int false "Page number (default: 1)"
 // @Param limit query int false "Number of items to retrieve per page (default: 10)"
@@ -56,6 +57,7 @@ func (controller OrderController) GetOrders(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path string true "Order ID"
 // @Success 200 {object} models.Order
@@ -97,6 +99,7 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param order body models.Order true "Order object"
 // @Success 200 {object} models.Order
@@ -143,6 +146,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 // @Tags orders
 // @Accept  json
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer token"
 // @Param customerId path int true "Customer ID"
 // @Param productId formData []int true "Product IDs"
@@ -205,6 +209,7 @@ func (controller OrderController) CreateOrderMulti(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path string true "Order ID"
 // @Param order body models.Order true "Order object"
@@ -258,6 +263,7 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Order ID"
 // @Success 200 {object} models.ErrorResponse
@@ -299,6 +305,7 @@ func (controller OrderController) DeleteOrder(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param query query string true "Customer ID"
 // @Param page query int false "Page number (default: 1)"
@@ -337,6 +344,7 @@ func (controller OrderController) SearchOrders(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Success 200 {array} models.Order
 // @Failure 400 {object} models.ErrorResponse
@@ -372,6 +380,7 @@ func (controller OrderController) GetMyOrders(c *gin.Context) {
 // @Tags orders
 // @Accept json
 // @Produce json
+// @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path string true "Order ID"
 // @Param order body models.Order true "Order object"
