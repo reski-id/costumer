@@ -428,6 +428,15 @@ const docTemplate = `{
                     "orders"
                 ],
                 "summary": "Get my orders",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -440,6 +449,77 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/myorder/{id}": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update an existing order placed by the authenticated user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Update my order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Order object",
+                        "name": "order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Order"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Order"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
                         }
@@ -542,6 +622,13 @@ const docTemplate = `{
                 "summary": "Get orders",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "Page number (default: 1)",
                         "name": "page",
@@ -585,6 +672,13 @@ const docTemplate = `{
                 ],
                 "summary": "Create order",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "description": "Order object",
                         "name": "order",
@@ -631,6 +725,13 @@ const docTemplate = `{
                 ],
                 "summary": "Search orders",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Customer ID",
@@ -692,6 +793,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Order ID",
                         "name": "id",
                         "in": "path",
@@ -732,6 +840,13 @@ const docTemplate = `{
                 ],
                 "summary": "Update order",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "string",
                         "description": "Order ID",
@@ -789,6 +904,13 @@ const docTemplate = `{
                 ],
                 "summary": "Delete an order",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer {token}",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "Order ID",
@@ -1262,14 +1384,11 @@ const docTemplate = `{
                 "quantity"
             ],
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
                 "customerId": {
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "orderStatus": {
                     "type": "string"
@@ -1279,9 +1398,6 @@ const docTemplate = `{
                 },
                 "quantity": {
                     "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         },

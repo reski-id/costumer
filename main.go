@@ -63,6 +63,7 @@ func main() {
 	v1.DELETE("/orders/:id", orderController.DeleteOrder)
 	v1.GET("/orders", orderController.GetOrders)
 	v1.GET("/myorder", orderController.GetMyOrders)
+	v1.PUT("/myorder/:id", orderController.UpdateMyOrder)
 	v1.GET("/orders/:id", orderController.GetOrder)
 	v1.GET("/orders/search", orderController.SearchOrders)
 
