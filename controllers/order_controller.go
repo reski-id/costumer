@@ -223,7 +223,13 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 	}
 
 	var order models.Order
-	result := db.First(&order, c.Param("id"))
+	orderID, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Invalid order ID"})
+		return
+	}
+
+	result := db.Where("id = ?", orderID).First(&order)
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Order not found"})
 		return
@@ -234,7 +240,6 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
-
 	result = db.Save(&order)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
@@ -353,3 +358,5 @@ func (controller OrderController) GetMyOrders(c *gin.Context) {
 
 	c.JSON(http.StatusOK, orders)
 }
+
+//update my order
