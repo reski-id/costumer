@@ -2,8 +2,11 @@ package main
 
 import (
 	"costumer/controllers"
+	"fmt"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 
 	docs "costumer/docs"
 	seed "costumer/seeder"
@@ -21,6 +24,13 @@ import (
 // @SecurityDefinition  jwt
 // @Security        jwt
 func main() {
+
+	//setting env
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+		os.Exit(1)
+	}
 
 	//migrate and seeder
 	seed.CreateMigration()
