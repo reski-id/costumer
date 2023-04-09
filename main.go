@@ -26,7 +26,7 @@ import (
 func main() {
 
 	//setting env
-	err := godotenv.Load()
+	err := godotenv.Load("devel.env")
 	if err != nil {
 		fmt.Println("Error loading .env file")
 		os.Exit(1)
@@ -80,5 +80,6 @@ func main() {
 
 	v1.POST("/images", uploadController.UploadAsset)
 	v1.DELETE("/images/:id", uploadController.DeleteAsset)
+	v1.POST("/file", uploadController.UploadAssetUsingS3)
 	router.Run(":8080")
 }

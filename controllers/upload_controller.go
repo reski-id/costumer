@@ -126,7 +126,7 @@ func (controller UploadController) DeleteAsset(c *gin.Context) {
 func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "File Required"})
 		return
 	}
 
@@ -137,35 +137,35 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 	// Open the file using the Open method of the FileHeader type
 	f, err := file.Open()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error q": err.Error()})
 		return
 	}
 	defer f.Close()
 
 	// Create a new S3 session
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-west-2"), // Replace with your preferred region
+		Region: aws.String("us-east-1"), // Replace with your preferred region
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
 		return
 	}
 
 	// Upload the file to the S3 bucket
 	_, err = s3.New(sess).PutObject(&s3.PutObjectInput{
-		Bucket: aws.String("my-bucket"), // Replace with your bucket name
+		Bucket: aws.String("myawsgin"), // Replace with your bucket name
 		Key:    aws.String(filename),
 		Body:   f,
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error 2": err.Error()})
 		return
 	}
 
 	// Return the uploaded file metadata
 	c.JSON(http.StatusOK, gin.H{
 		"filename": filename,
-		"url":      "https://my-bucket.s3.us-west-2.amazonaws.com/" + filename,
+		"url":      "https://myawsgin.s3.us-east-1.amazonaws.com/" + filename,
 	})
 }
 
@@ -175,7 +175,7 @@ func (controller UploadController) DeleteAssetsInS3(c *gin.Context) {
 
 	// Create a new S3 session
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-west-2"), // Replace with your preferred region
+		Region: aws.String("us-east-1"), // Replace with your preferred region
 	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -184,7 +184,7 @@ func (controller UploadController) DeleteAssetsInS3(c *gin.Context) {
 
 	// Delete the file from the S3 bucket
 	_, err = s3.New(sess).DeleteObject(&s3.DeleteObjectInput{
-		Bucket: aws.String("my-bucket"), // Replace with your bucket name
+		Bucket: aws.String("aws-bucket-alterra"), // Replace with your bucket name
 		Key:    aws.String(filename),
 	})
 	if err != nil {
