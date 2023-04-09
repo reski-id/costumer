@@ -215,7 +215,7 @@ func (controller CustomerController) UpdateCustomer(c *gin.Context) {
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Customer ID"
 // @Produce json
-// @Success 200 {object} models.ErrorResponse
+// @Success 200 {object} models.MessageResponse
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
 // @Router /customers/{id} [delete]
@@ -245,7 +245,7 @@ func (controller CustomerController) DeleteCustomer(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Customer deleted successfully"})
+	c.JSON(http.StatusOK, models.MessageResponse{Message: "Costumer Deleted Succesfully"})
 }
 
 // SearchCustomers godoc

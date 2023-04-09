@@ -47,7 +47,7 @@ $ go run main.go #again
 ```
 
 > **Note**
-> Make sure you allready create database mysql `costumerdb` for this app.more info in local `utils/database.go` file.
+> Make sure you allready create database mysql `costumerdb` for this app.more info in local `.env` and `utils/database.go` file.
 
 
 ## ⚙️ Installing and Runing with Docker

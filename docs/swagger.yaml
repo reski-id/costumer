@@ -34,6 +34,11 @@ definitions:
     - password
     - username
     type: object
+  models.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
   models.Order:
     properties:
       customerId:
@@ -95,6 +100,22 @@ definitions:
         type: string
       username:
         type: string
+    type: object
+  models.Upload:
+    properties:
+      createdAt:
+        type: string
+      file:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - file
+    - name
     type: object
   models.User:
     properties:
@@ -222,7 +243,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ErrorResponse'
+            $ref: '#/definitions/models.MessageResponse'
         "404":
           description: Not Found
           schema:
@@ -351,6 +372,91 @@ paths:
       summary: Search customers by name
       tags:
       - Customers
+  /images:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a new asset file and save its metadata to the database
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Asset name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Asset file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Upload'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new asset
+      tags:
+      - assets
+  /images/{id}:
+    delete:
+      description: Delete an asset file and its metadata from the database
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Asset ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete an asset
+      tags:
+      - assets
   /login:
     post:
       consumes:
@@ -624,7 +730,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ErrorResponse'
+            $ref: '#/definitions/models.MessageResponse'
         "401":
           description: Unauthorized
           schema:
@@ -862,7 +968,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.ErrorResponse'
+            $ref: '#/definitions/models.MessageResponse'
         "400":
           description: Bad Request
           schema:

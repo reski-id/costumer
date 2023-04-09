@@ -266,7 +266,7 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Order ID"
-// @Success 200 {object} models.ErrorResponse
+// @Success 200 {object} models.MessageResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
@@ -297,7 +297,7 @@ func (controller OrderController) DeleteOrder(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Order deleted"})
+	c.JSON(http.StatusOK, models.MessageResponse{Message: "Order Deleted Succesfully"})
 }
 
 // @Summary Search orders

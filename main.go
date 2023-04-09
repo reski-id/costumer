@@ -47,6 +47,7 @@ func main() {
 	orderController := controllers.OrderController{}
 	authController := controllers.AuthController{}
 	productController := controllers.ProductController{}
+	uploadController := controllers.UploadController{}
 
 	v1 := router.Group("/api/v1")
 
@@ -77,5 +78,7 @@ func main() {
 	v1.GET("/orders/:id", orderController.GetOrder)
 	v1.GET("/orders/search", orderController.SearchOrders)
 
+	v1.POST("/images", uploadController.UploadAsset)
+	v1.DELETE("/images/:id", uploadController.DeleteAsset)
 	router.Run(":8080")
 }
