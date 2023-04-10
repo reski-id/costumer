@@ -7,1294 +7,1340 @@
 	},
 	"item": [
 		{
-			"name": "register",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "fullname",
-							"value": "Ahmad Reski",
-							"type": "text"
-						},
-						{
-							"key": "username",
-							"value": "reski",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "12345",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "reski@gmail.com",
-							"type": "text"
-						},
-						{
-							"key": "role",
-							"value": "admin",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/register",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "username",
-							"value": "reski",
-							"type": "text"
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fullname",
+									"value": "Ahmad Reski",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "reski",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "reski@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "12345",
-							"type": "text"
+						"url": {
+							"raw": "localhost:8080/api/v1/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"register"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/login",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"login"
-					]
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "reski",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "costumer create",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
+			"name": "Costumer",
+			"item": [
+				{
+					"name": "costumer create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fullname",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "testing1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "124544",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "6781212",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "asasasasas",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "fullname",
-							"value": "testingcostumer",
-							"type": "text"
+				{
+					"name": "costumer update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "username",
-							"value": "testing1",
-							"type": "text"
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "John Doe testing update",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "john.doeupdate@example.com",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "1212112",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "123 Main St upt",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "124544",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing1@gmail.com",
-							"type": "text"
-						},
-						{
-							"key": "role",
-							"value": "admin",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "6781212",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "asasasasas",
-							"type": "text"
+						"url": {
+							"raw": "localhost:8080/api/v1/customers/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"1"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers"
-					]
+				{
+					"name": "costumer delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "reski",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "testing",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetOneCostumer",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllCostumer",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "reski",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "testing",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "12345",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers?page=1&limit=5",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CostumerSearch",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers/search?query=doe",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "doe"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "register",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
+			"name": "Products",
+			"item": [
+				{
+					"name": "product create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "laptop",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "laptop testing",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "1000000000",
+									"type": "text"
+								},
+								{
+									"key": "sku",
+									"value": "1111111111111111111",
+									"type": "text"
+								},
+								{
+									"key": "qty",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"value": "dddddddddd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "fullname",
-							"value": "testingcostumer",
-							"type": "text"
+				{
+					"name": "product update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "username",
-							"value": "reski11",
-							"type": "text"
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Dell XPS 13 update",
+									"type": "text"
+								},
+								{
+									"key": "qty",
+									"value": "20",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "124544",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testingrr@gmail.com",
-							"type": "text"
-						},
-						{
-							"key": "role",
-							"value": "admin",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "6781212",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "asasasasas",
-							"type": "text"
+						"url": {
+							"raw": "localhost:8080/api/v1/products/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"1"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/register",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"register"
-					]
+				{
+					"name": "product delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "testing address",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0812121212",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product get all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "testing address",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0812121212",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products?limit=3",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ProductSearch",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products/search?query=dell",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "dell"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "productgetone",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "testing address",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0812121212",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "costumer update",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
+			"name": "Orders",
+			"item": [
+				{
+					"name": "orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "testing address",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0812121212",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "John Doe testing update",
-							"type": "text"
+				{
+					"name": "myorders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "email",
-							"value": "john.doeupdate@example.com",
-							"type": "text"
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "testing address",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0812121212",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
 						},
-						{
-							"key": "phoneNumber",
-							"value": "1212112",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "123 Main St upt",
-							"type": "text"
+						"url": {
+							"raw": "localhost:8080/api/v1/myorder",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"myorder"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers",
-						"1"
-					]
+				{
+					"name": "order by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "quantity",
+									"value": "4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/orders/0c4f8590-0bf5-4435-afb5-565db54f43d7",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"0c4f8590-0bf5-4435-afb5-565db54f43d7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updatemyorders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/myorder/5f2b7e77-f653-44b3-9e44-7f258c1c5f99",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"myorder",
+								"5f2b7e77-f653-44b3-9e44-7f258c1c5f99"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateorderbyadmin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/orders/0c4f8590-0bf5-4435-afb5-565db54f43d7",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"0c4f8590-0bf5-4435-afb5-565db54f43d7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders multi",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "productId",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/multiorder",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"multiorder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OrderSearch",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers/search?query=doe",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "doe"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "3",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/orders",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "orderStatus",
+									"value": "Success",
+									"type": "text"
+								},
+								{
+									"key": "productId",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "quantity",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/orders/9d5b41d3-0ddb-461c-8312-e8997d5dd51a",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"9d5b41d3-0ddb-461c-8312-e8997d5dd51a"
+							],
+							"query": [
+								{
+									"key": "orderStatus",
+									"value": "Success",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "testingcostumer",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "testing address",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "0812121212",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "testing@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/products/6",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"6"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "costumer delete",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
+			"name": "Assets",
+			"item": [
+				{
+					"name": "Images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "TestingUpload",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/task1/screenshoot/Swagger.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/images",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"images"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "reski",
-							"type": "text"
+				{
+					"name": "deleteimages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "username",
-							"value": "testing",
-							"type": "text"
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "TestingUpload",
+									"type": "text"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/D:/task1/screenshoot/Swagger.png"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "12345",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
+						"url": {
+							"raw": "localhost:8080/api/v1/images/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"images",
+								"4"
+							]
 						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers/2",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers",
-						"2"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "GetAllCostumer",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6OSwicm9sZSI6ImFkbWluIn0.Q9-XCCS74-IJUalYGuKEm0uL1GwydWshVs3n8xQ4K9c",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "reski",
-							"type": "text"
-						},
-						{
-							"key": "username",
-							"value": "testing",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "12345",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers?page=1&limit=5",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers"
-					],
-					"query": [
-						{
-							"key": "page",
-							"value": "1"
-						},
-						{
-							"key": "limit",
-							"value": "5"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "GetOneCostumer",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers/2",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CostumerSearch",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers/search?query=doe",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers",
-						"search"
-					],
-					"query": [
-						{
-							"key": "query",
-							"value": "doe"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "product create",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "laptop",
-							"type": "text"
-						},
-						{
-							"key": "description",
-							"value": "laptop testing",
-							"type": "text"
-						},
-						{
-							"key": "price",
-							"value": "1000000000",
-							"type": "text"
-						},
-						{
-							"key": "sku",
-							"value": "1111111111111111111",
-							"type": "text"
-						},
-						{
-							"key": "qty",
-							"value": "3",
-							"type": "text"
-						},
-						{
-							"key": "file",
-							"value": "dddddddddd",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "product update",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "Dell XPS 13 update",
-							"type": "text"
-						},
-						{
-							"key": "qty",
-							"value": "20",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "product delete",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "testingcostumer",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products/6",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products",
-						"6"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "product get all",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "testingcostumer",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products?limit=3",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products"
-					],
-					"query": [
-						{
-							"key": "limit",
-							"value": "3"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ProductSearch",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products/search?query=dell",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products",
-						"search"
-					],
-					"query": [
-						{
-							"key": "query",
-							"value": "dell"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "productgetone",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "testingcostumer",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products/1",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "orders",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "testingcostumer",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/orders",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"orders"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "order by id",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "quantity",
-							"value": "4",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/orders/0c4f8590-0bf5-4435-afb5-565db54f43d7",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"orders",
-						"0c4f8590-0bf5-4435-afb5-565db54f43d7"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "myorders",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "testingcostumer",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/myorder",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"myorder"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "updatemyorders",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "productId",
-							"value": "4",
-							"type": "text"
-						},
-						{
-							"key": "quantity",
-							"value": "1",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/myorder/5f2b7e77-f653-44b3-9e44-7f258c1c5f99",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"myorder",
-						"5f2b7e77-f653-44b3-9e44-7f258c1c5f99"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "updateorderbyadmin",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/orders/0c4f8590-0bf5-4435-afb5-565db54f43d7",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"orders",
-						"0c4f8590-0bf5-4435-afb5-565db54f43d7"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "OrderSearch",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": []
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/customers/search?query=doe",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"customers",
-						"search"
-					],
-					"query": [
-						{
-							"key": "query",
-							"value": "doe"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "orders multi",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "productId",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "quantity",
-							"value": "3",
-							"type": "text"
-						},
-						{
-							"key": "productId",
-							"value": "2",
-							"type": "text"
-						},
-						{
-							"key": "quantity",
-							"value": "2",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/multiorder",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"multiorder"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "orders",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "productId",
-							"value": "1",
-							"type": "text"
-						},
-						{
-							"key": "quantity",
-							"value": "3",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/orders",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"orders"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "orders update",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "orderStatus",
-							"value": "Success",
-							"type": "text"
-						},
-						{
-							"key": "productId",
-							"value": "2",
-							"type": "text"
-						},
-						{
-							"key": "quantity",
-							"value": "5",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/orders/9d5b41d3-0ddb-461c-8312-e8997d5dd51a",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"orders",
-						"9d5b41d3-0ddb-461c-8312-e8997d5dd51a"
-					],
-					"query": [
-						{
-							"key": "orderStatus",
-							"value": "Success",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "order delete",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "name",
-							"value": "testingcostumer",
-							"type": "text"
-						},
-						{
-							"key": "address",
-							"value": "testing address",
-							"type": "text"
-						},
-						{
-							"key": "phoneNumber",
-							"value": "0812121212",
-							"type": "text"
-						},
-						{
-							"key": "email",
-							"value": "testing@gmail.com",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/api/v1/products/6",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"products",
-						"6"
-					]
-				}
-			},
-			"response": []
+			]
 		}
 	]
 }

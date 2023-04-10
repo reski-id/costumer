@@ -109,20 +109,20 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 func (controller OrderController) CreateOrder(c *gin.Context) {
 	CustomerID, _, err := utils.ExtractData(c)
 	if CustomerID == -1 {
-		c.JSON(http.StatusBadRequest, gin.H{"Silahkan Login Terlebih dahulu": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Silahkan Login Terlebih dahulu"})
 		return
 	}
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error Connect to Databases": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "error Connect to Databases"})
 		return
 	}
 
 	var order models.Order
 	err = c.ShouldBind(&order)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error Error Bind": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Binding Data"})
 		return
 	}
 
@@ -133,7 +133,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 
 	result := db.Create(&order)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error Create Order": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Create Order Error"})
 		return
 	}
 
@@ -266,7 +266,7 @@ func (controller OrderController) UpdateOrder(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Order ID"
-// @Success 200 {object} models.ErrorResponse
+// @Success 200 {object} models.MessageResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
 // @Failure 500 {object} models.ErrorResponse
@@ -297,7 +297,7 @@ func (controller OrderController) DeleteOrder(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Order deleted"})
+	c.JSON(http.StatusOK, models.MessageResponse{Message: "Order Deleted Succesfully"})
 }
 
 // @Summary Search orders

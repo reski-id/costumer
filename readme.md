@@ -47,7 +47,7 @@ $ go run main.go #again
 ```
 
 > **Note**
-> Make sure you allready create database mysql `costumerdb` for this app.more info in local `utils/database.go` file.
+> Make sure you allready create database mysql `costumerdb` for this app.more info in local `.env` and `utils/database.go` file.
 
 
 ## ⚙️ Installing and Runing with Docker
@@ -110,6 +110,11 @@ Orders
 | `POST`        | /api/v1/multiorder              | Create multi order / batch order
 | `PUT`         | /api/v1/orders/:id         | Update data orders
 | `DELETE`      | /api/v1/orders/:id         | Delete orders  
+
+Orders
+| Methode       | End Point      | used for            
+| ------------- | -------------  | -----------                      
+| `POST`        | /api/v1/cart            | Add to Cart
 
 ## 📜 Swagger Open Api
 after you running the app you can access swagger open api in this 

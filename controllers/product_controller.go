@@ -191,7 +191,7 @@ func (controller ProductController) UpdateProduct(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param Authorization header string true "Bearer {token}"
 // @Param id path int true "Product ID"
-// @Success 200 {object} models.ErrorResponse
+// @Success 200 {object} models.MessageResponse
 // @Failure 400 {object} models.ErrorResponse
 // @Failure 401 {object} models.ErrorResponse
 // @Failure 404 {object} models.ErrorResponse
@@ -232,7 +232,7 @@ func (controller ProductController) DeleteProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, models.ErrorResponse{Error: "Product deleted successfully"})
+	c.JSON(http.StatusOK, models.MessageResponse{Message: "Product deleted successfully"})
 }
 
 // SearchProduct searches for products with a matching name

@@ -47,6 +47,8 @@ func main() {
 	orderController := controllers.OrderController{}
 	authController := controllers.AuthController{}
 	productController := controllers.ProductController{}
+	cartController := controllers.CartController{}
+	uploadController := controllers.UploadController{}
 
 	v1 := router.Group("/api/v1")
 
@@ -77,5 +79,10 @@ func main() {
 	v1.GET("/orders/:id", orderController.GetOrder)
 	v1.GET("/orders/search", orderController.SearchOrders)
 
+	v1.POST("/cart", cartController.AddToCart)
+
+	v1.POST("/images", uploadController.UploadAsset)
+	v1.DELETE("/images/:id", uploadController.DeleteAsset)
+	v1.POST("/file", uploadController.UploadAssetUsingS3)
 	router.Run(":8080")
 }
