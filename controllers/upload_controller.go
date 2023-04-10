@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -140,10 +139,16 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 	ext := filepath.Ext(file.Filename)
 	filename := uuid.New().String() + ext
 
+	AWS_REGION := os.Getenv("AWS_REGION")
+	AWS_BUCKET := os.Getenv("AWS_BUCKET")
+	AWS_ACCESS_KEY_ID := os.Getenv("AWS_ACCESS_KEY_ID")
+	AWS_SECRET_ACCESS_KEY := os.Getenv("AWS_SECRET_ACCESS_KEY")
+
 	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String(os.Getenv("AWS_REGION")),
-		Credentials: credentials.NewStaticCredentials("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", ""),
+		Region:      &AWS_REGION,
+		Credentials: credentials.NewStaticCredentials(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, ""),
 	})
+
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Internal server error",
@@ -166,7 +171,7 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 
 	// Upload file to S3
 	_, err = uploader.Upload(&s3manager.UploadInput{
-		Bucket: aws.String(os.Getenv("AWS_BUCKET")),
+		Bucket: &AWS_BUCKET,
 		Key:    aws.String(filename),
 		Body:   fileObj,
 	})
@@ -179,36 +184,11 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 
 	// Return success response
 	c.JSON(http.StatusOK, gin.H{
-		"url": fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", os.Getenv("AWS_BUCKET"), os.Getenv("AWS_REGION"), filename),
+		"url": fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", AWS_BUCKET, AWS_REGION, filename),
 	})
 }
 
-func (controller UploadController) DeleteAssetsInS3(c *gin.Context) {
-	// Get the filename to be deleted from the request URL parameter
-	filename := c.Param("filename")
-
-	// Create a new S3 session
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"), // Replace with your preferred region
-	})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
-		return
-	}
-
-	// Delete the file from the S3 bucket
-	_, err = s3.New(sess).DeleteObject(&s3.DeleteObjectInput{
-		Bucket: aws.String("aws-bucket-alterra"), // Replace with your bucket name
-		Key:    aws.String(filename),
-	})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
-		return
-	}
-
-	// Return a success message
-	c.JSON(http.StatusOK, models.MessageResponse{Message: "File Deleted Succesfully"})
-}
+//delete
 
 //upload to cgp
 
