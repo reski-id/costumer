@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"costumer/models"
 	"fmt"
 	"log"
 	"net/http"
@@ -61,7 +62,7 @@ func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
 		if !strings.HasPrefix(authHeader, "Bearer ") {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid Authorization header"})
+			c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid Authorization header"})
 			c.Abort()
 			return
 		}
@@ -75,7 +76,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		})
 
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: err.Error()})
 			c.Abort()
 			return
 		}
@@ -83,13 +84,13 @@ func AuthMiddleware() gin.HandlerFunc {
 		if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 			c.Set("user_id", claims.UserID)
 			if !claims.Role {
-				c.JSON(http.StatusUnauthorized, gin.H{"error": "You do not have permission to access this resource"})
+				c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "You do not have permission to access this resource"})
 				c.Abort()
 				return
 			}
 			c.Next()
 		} else {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid token"})
 			c.Abort()
 			return
 		}

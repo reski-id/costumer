@@ -26,7 +26,7 @@ import (
 func main() {
 
 	//setting env
-	err := godotenv.Load("devel.env")
+	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Error loading .env file")
 		os.Exit(1)
@@ -47,6 +47,7 @@ func main() {
 	orderController := controllers.OrderController{}
 	authController := controllers.AuthController{}
 	productController := controllers.ProductController{}
+	cartController := controllers.CartController{}
 	uploadController := controllers.UploadController{}
 
 	v1 := router.Group("/api/v1")
@@ -77,6 +78,8 @@ func main() {
 	v1.PUT("/myorder/:id", orderController.UpdateMyOrder)
 	v1.GET("/orders/:id", orderController.GetOrder)
 	v1.GET("/orders/search", orderController.SearchOrders)
+
+	v1.POST("/cart", cartController.AddToCart)
 
 	v1.POST("/images", uploadController.UploadAsset)
 	v1.DELETE("/images/:id", uploadController.DeleteAsset)

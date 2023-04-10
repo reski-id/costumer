@@ -109,20 +109,20 @@ func (controller OrderController) GetOrder(c *gin.Context) {
 func (controller OrderController) CreateOrder(c *gin.Context) {
 	CustomerID, _, err := utils.ExtractData(c)
 	if CustomerID == -1 {
-		c.JSON(http.StatusBadRequest, gin.H{"Silahkan Login Terlebih dahulu": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Silahkan Login Terlebih dahulu"})
 		return
 	}
 
 	db, err := utils.Connect()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error Connect to Databases": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "error Connect to Databases"})
 		return
 	}
 
 	var order models.Order
 	err = c.ShouldBind(&order)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error Error Bind": err.Error()})
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "Binding Data"})
 		return
 	}
 
@@ -133,7 +133,7 @@ func (controller OrderController) CreateOrder(c *gin.Context) {
 
 	result := db.Create(&order)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error Create Order": result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Create Order Error"})
 		return
 	}
 

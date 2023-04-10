@@ -111,6 +111,11 @@ Orders
 | `PUT`         | /api/v1/orders/:id         | Update data orders
 | `DELETE`      | /api/v1/orders/:id         | Delete orders  
 
+Orders
+| Methode       | End Point      | used for            
+| ------------- | -------------  | -----------                      
+| `POST`        | /api/v1/cart            | Add to Cart
+
 ## 📜 Swagger Open Api
 after you running the app you can access swagger open api in this 
  http://localhost:8080/swagger/index.html

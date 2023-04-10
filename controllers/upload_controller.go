@@ -137,7 +137,7 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 	// Open the file using the Open method of the FileHeader type
 	f, err := file.Open()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error q": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 	defer f.Close()
@@ -147,7 +147,7 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 		Region: aws.String("us-east-1"), // Replace with your preferred region
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error 1": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -158,7 +158,7 @@ func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
 		Body:   f,
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error 2": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -178,7 +178,7 @@ func (controller UploadController) DeleteAssetsInS3(c *gin.Context) {
 		Region: aws.String("us-east-1"), // Replace with your preferred region
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
@@ -188,10 +188,14 @@ func (controller UploadController) DeleteAssetsInS3(c *gin.Context) {
 		Key:    aws.String(filename),
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	// Return a success message
 	c.JSON(http.StatusOK, models.MessageResponse{Message: "File Deleted Succesfully"})
 }
+
+//upload to cgp
+
+//delete from cgp
