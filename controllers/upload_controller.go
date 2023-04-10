@@ -3,13 +3,16 @@ package controllers
 import (
 	"costumer/models"
 	"costumer/utils"
+	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -124,48 +127,59 @@ func (controller UploadController) DeleteAsset(c *gin.Context) {
 }
 
 func (controller UploadController) UploadAssetUsingS3(c *gin.Context) {
+	// Get file from form
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "File Required"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Bad request",
+		})
 		return
 	}
 
-	// Generate a unique filename for the uploaded file
+	// Generate unique filename for S3 object
 	ext := filepath.Ext(file.Filename)
-	filename := uuid.NewString() + ext
+	filename := uuid.New().String() + ext
 
-	// Open the file using the Open method of the FileHeader type
-	f, err := file.Open()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
-		return
-	}
-	defer f.Close()
-
-	// Create a new S3 session
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("us-east-1"), // Replace with your preferred region
+		Region:      aws.String(os.Getenv("AWS_REGION")),
+		Credentials: credentials.NewStaticCredentials("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", ""),
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error",
+		})
 		return
 	}
 
-	// Upload the file to the S3 bucket
-	_, err = s3.New(sess).PutObject(&s3.PutObjectInput{
-		Bucket: aws.String("myawsgin"), // Replace with your bucket name
+	// Create S3 uploader
+	uploader := s3manager.NewUploader(sess)
+
+	// Open file
+	fileObj, err := file.Open()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error",
+		})
+		return
+	}
+	defer fileObj.Close()
+
+	// Upload file to S3
+	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(os.Getenv("AWS_BUCKET")),
 		Key:    aws.String(filename),
-		Body:   f,
+		Body:   fileObj,
 	})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Internal server error",
+		})
 		return
 	}
 
-	// Return the uploaded file metadata
+	// Return success response
 	c.JSON(http.StatusOK, gin.H{
-		"filename": filename,
-		"url":      "https://myawsgin.s3.us-east-1.amazonaws.com/" + filename,
+		"url": fmt.Sprintf("https://%s.s3.%s.amazonaws.com/%s", os.Getenv("AWS_BUCKET"), os.Getenv("AWS_REGION"), filename),
 	})
 }
 
