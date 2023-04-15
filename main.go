@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"costumer/controllers"
+	"costumer/trace"
+	"costumer/utils"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +28,27 @@ import (
 // @SecurityDefinition  jwt
 // @Security        jwt
 func main() {
+
+	//init tracer
+	// tracer already running on dockerdeskop
+	// jaegertracing/all-in-one:1.22.0
+	// Running 14268:14268
+	// 		16686:16686
+
+	ctx := context.Background()
+	prv, errTracing := trace.NewProvider(trace.ProviderConfig{
+		JaegerEndpoint: "http://localhost:14268/api/traces",
+		ServiceName:    "CostumerApp",
+		ServiceVersion: "1.0.0",
+		Environment:    "dev",
+		Disabled:       false,
+	})
+	if errTracing != nil {
+		log.Println(errTracing)
+	} else {
+		log.Println("JaegerKonnect")
+	}
+	defer prv.Close(ctx)
 
 	//setting env
 	err := godotenv.Load()
@@ -52,7 +77,7 @@ func main() {
 
 	v1 := router.Group("/api/v1")
 
-	v1.POST("/login", authController.Login)
+	v1.POST("/login", authController.Login, utils.JaegerTracing()) //sample tracer using telemetry on fitur login only
 	v1.POST("/register", authController.Register)
 
 	v1.POST("/customers", customerController.CreateCustomer)

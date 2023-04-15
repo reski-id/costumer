@@ -21,6 +21,8 @@
 * Customers
 * Products
 * Orders
+* Swagger OpenAPI
+* Profiling with Jaeger Telemetry `on login Function`
 
 
 ## ⚙️ Installing and Runing from Github
@@ -111,7 +113,7 @@ Orders
 | `PUT`         | /api/v1/orders/:id         | Update data orders
 | `DELETE`      | /api/v1/orders/:id         | Delete orders  
 
-Orders
+Cart
 | Methode       | End Point      | used for            
 | ------------- | -------------  | -----------                      
 | `POST`        | /api/v1/cart            | Add to Cart
@@ -131,6 +133,7 @@ This software uses the following Tech:
 - [Gin Framework](https://gin-gonic.com/)
 - [Gorm](https://gorm.io/index.html)
 - [OpenAPI Swaggo](https://github.com/swaggo/gin-swagger)
+- [Jaeger Telemetry](https://www.jaegertracing.io/)
 - [UUID](github.com/google/uuid)
 - [mysql](https://www.mysql.com/)
 - [Linux](https://www.linux.com/)
