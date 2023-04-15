@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel/attribute"
 	"golang.org/x/crypto/bcrypt"
 
 	"costumer/models"
+	"costumer/trace"
 	"costumer/utils"
 )
 
@@ -28,13 +30,26 @@ type AuthController struct{}
 // @Router /login [post]
 func (auth *AuthController) Login(c *gin.Context) {
 	var loginData models.LoginData
+
+	_, span := trace.NewSpan(c, "AuthController.Login", nil)
+	defer span.End()
+	span.SetAttributes(
+		attribute.String("Method", c.Request.Method),
+		attribute.String("URL", c.Request.RequestURI),
+		attribute.String("Proto", c.Request.Proto),
+		attribute.String("RemoteAddr", c.Request.RemoteAddr),
+		attribute.String("Host", c.Request.Host))
 	if err := c.ShouldBind(&loginData); err != nil {
+		trace.AddSpanError(span, err)
+		trace.FailSpan(span, err.Error())
 		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: err.Error()})
 		return
 	}
 
 	db, err := utils.Connect()
 	if err != nil {
+		trace.AddSpanError(span, err)
+		trace.FailSpan(span, err.Error())
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Database connection error"})
 		return
 	}
@@ -42,17 +57,29 @@ func (auth *AuthController) Login(c *gin.Context) {
 	var user models.User
 	result := db.Where("username = ?", loginData.Username).First(&user)
 	if result.Error != nil {
+		_, span := trace.NewSpan(c, "AuthController.Login:FindUser", nil)
+		defer span.End()
+		trace.AddSpanError(span, result.Error)
+		trace.FailSpan(span, result.Error.Error())
 		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid username or password"})
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginData.Password)); err != nil {
+		_, span := trace.NewSpan(c, "AuthController.CompareHashAndPassword", nil)
+		defer span.End()
+		trace.AddSpanError(span, err)
+		trace.FailSpan(span, err.Error())
 		c.JSON(http.StatusUnauthorized, models.ErrorResponse{Error: "Invalid username or password"})
 		return
 	}
 
 	token, err := utils.GenerateToken(int(user.ID), user.Role)
 	if err != nil {
+		_, span := trace.NewSpan(c, "AuthController.GenerateToken", nil)
+		defer span.End()
+		trace.AddSpanError(span, err)
+		trace.FailSpan(span, err.Error())
 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: "Token generation error"})
 		return
 	}
