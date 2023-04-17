@@ -6,15 +6,19 @@ import (
 
 type User struct {
 	Model
-	Username    string `json:"username" form:"username" binding:"required"`
-	Fullname    string `json:"fullname" form:"fullname" binding:"required"`
-	Password    string `json:"password" form:"password" binding:"required"`
-	Email       string `json:"email" form:"email" binding:"required" gorm:"unique"`
-	Role        string `json:"role" form:"role"`
-	PhoneNumber string `json:"phoneNumber" form:"phoneNumber"`
-	Address     string `json:"address" form:"address"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	Username         string `json:"username" form:"username" binding:"required"`
+	Fullname         string `json:"fullname" form:"fullname" binding:"required"`
+	Password         string `json:"password" form:"password" binding:"required"`
+	Email            string `json:"email" form:"email" binding:"required" gorm:"unique"`
+	Role             string `json:"role" form:"role"`
+	PhoneNumber      string `json:"phoneNumber" form:"phoneNumber"`
+	Address          string `json:"address" form:"address"`
+	GoogleID         string `json:"googleID"`
+	GoogleEmail      string `json:"googleEmail"`
+	GoogleName       string `json:"googleName"`
+	GooglePictureURL string `json:"googlePictureURL"`
+	CreatedAt        time.Time
+	UpdatedAt        time.Time
 }
 
 type Model struct {
