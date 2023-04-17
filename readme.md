@@ -23,6 +23,7 @@
 * Orders
 * Swagger OpenAPI
 * Profiling with Jaeger Telemetry `on login Function`
+* Redis Caching `on get all Product and get single Product`
 
 
 ## ⚙️ Installing and Runing from Github
@@ -134,6 +135,7 @@ This software uses the following Tech:
 - [Gorm](https://gorm.io/index.html)
 - [OpenAPI Swaggo](https://github.com/swaggo/gin-swagger)
 - [Jaeger Telemetry](https://www.jaegertracing.io/)
+- [Redis](https://redis.io/)
 - [UUID](github.com/google/uuid)
 - [mysql](https://www.mysql.com/)
 - [Linux](https://www.linux.com/)
