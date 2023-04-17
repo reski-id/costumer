@@ -11,7 +11,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
 )
 
 type ProductController struct{}
@@ -282,11 +281,16 @@ func (controller ProductController) GetProducts(c *gin.Context) {
 	cacheKey := fmt.Sprintf("products:%s:%s", page, limit)
 
 	// Initialize Redis client
-	redisClient := redis.NewClient(&redis.Options{
+	redisClient, err := utils.ConnectRedis(utils.RedisConfig{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
 
 	cachedData, err := redisClient.Get(cacheKey).Result()
 	if err == nil {
@@ -368,11 +372,16 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 	cacheKey := fmt.Sprintf("product:%s", c.Param("id"))
 
 	// Initialize Redis client
-	redisClient := redis.NewClient(&redis.Options{
+	redisConfig := utils.RedisConfig{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
-	})
+	}
+	redisClient, err := utils.ConnectRedis(redisConfig)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
 
 	cachedData, err := redisClient.Get(cacheKey).Result()
 	if err == nil {
