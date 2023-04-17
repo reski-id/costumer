@@ -416,6 +416,7 @@ func (controller ProductController) GetProduct(c *gin.Context) {
 	}
 	if _, err = redisClient.Set(cacheKey, jsonData, time.Minute*5).Result(); err != nil {
 		log.Printf("Failed to cache data: %s\n", err.Error())
+		fmt.Println(err)
 	}
 
 	c.JSON(http.StatusOK, product)
