@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8" // Import Redis package
 	"github.com/joho/godotenv"
 
 	docs "costumer/docs"
@@ -18,6 +19,9 @@ import (
 	swaggerfiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
+
+// Declare Redis client
+var rdb *redis.Client
 
 // @title           Swagger Costumer APP
 // @version         2.0

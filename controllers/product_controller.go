@@ -3,10 +3,15 @@ package controllers
 import (
 	"costumer/models"
 	"costumer/utils"
+	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
 )
 
 type ProductController struct{}
@@ -50,87 +55,77 @@ func (controller ProductController) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, product)
 }
 
-// GetProducts godoc
-// @Summary Get a list of products
-// @Description Get a list of products with pagination support
-// @Tags products
-// @Accept json
-// @Produce json
-// @Param page query int false "Page number (default 1)"
-// @Param limit query int false "Number of items per page (default 10)"
-// @Success 200 {object} models.ProductsResponse
-// @Failure 400 {object} models.ErrorResponse
-// @Failure 500 {object} models.ErrorResponse
-// @Router /products [get]
-func (controller ProductController) GetProducts(c *gin.Context) {
-	// all user can access
-	db, err := utils.Connect()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
-		return
-	}
+// // GetProducts godoc
+// // @Summary Get a list of products
+// // @Description Get a list of products with pagination support
+// // @Tags products
+// // @Accept json
+// // @Produce json
+// // @Param page query int false "Page number (default 1)"
+// // @Param limit query int false "Number of items per page (default 10)"
+// // @Success 200 {object} models.ProductsResponse
+// // @Failure 400 {object} models.ErrorResponse
+// // @Failure 500 {object} models.ErrorResponse
+// // @Router /products [get]
+// func (controller ProductController) GetProducts(c *gin.Context) {
+// 	// all user can access
+// 	db, err := utils.Connect()
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+// 		return
+// 	}
+// 	var products []models.Product
+// 	page, err := strconv.Atoi(c.Query("page"))
+// 	if err != nil {
+// 		page = 1
+// 	}
+// 	limit, err := strconv.Atoi(c.Query("limit"))
+// 	if err != nil {
+// 		limit = 10
+// 	}
+// 	offset := (page - 1) * limit
+// 	if result := db.Offset(offset).Limit(limit).Find(&products); result.Error != nil {
+// 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
+// 		return
+// 	}
+// 	var total int64
+// 	if result := db.Model(&models.Product{}).Count(&total); result.Error != nil {
+// 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
+// 		return
+// 	}
+// 	response := models.ProductsResponse{
+// 		Data:  products,
+// 		Count: total,
+// 	}
+// 	c.JSON(http.StatusOK, response)
+// }
 
-	var products []models.Product
-
-	page, err := strconv.Atoi(c.Query("page"))
-	if err != nil {
-		page = 1
-	}
-
-	limit, err := strconv.Atoi(c.Query("limit"))
-	if err != nil {
-		limit = 10
-	}
-
-	offset := (page - 1) * limit
-
-	if result := db.Offset(offset).Limit(limit).Find(&products); result.Error != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
-		return
-	}
-
-	var total int64
-	if result := db.Model(&models.Product{}).Count(&total); result.Error != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
-		return
-	}
-
-	response := models.ProductsResponse{
-		Data:  products,
-		Count: total,
-	}
-
-	c.JSON(http.StatusOK, response)
-}
-
-// @Summary Get a product by ID
-// @Description Retrieve a product by ID
-// @Tags products
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param Authorization header string true "Bearer {token}"
-// @Param id path int true "Product ID"
-// @Success 200 {object} models.Product
-// @Failure 404 {object} models.ErrorResponse
-// @Failure 500 {object} models.ErrorResponse
-// @Router /products/{id} [get]
-func (controller ProductController) GetProduct(c *gin.Context) {
-	// all user can access
-	db, err := utils.Connect()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
-		return
-	}
-
-	var product models.Product
-	if result := db.First(&product, c.Param("id")); result.Error != nil {
-		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Product not found"})
-		return
-	}
-
-	c.JSON(http.StatusOK, product)
-}
+// // @Summary Get a product by ID
+// // @Description Retrieve a product by ID
+// // @Tags products
+// // @Accept json
+// // @Produce json
+// // @Security ApiKeyAuth
+// // @Param Authorization header string true "Bearer {token}"
+// // @Param id path int true "Product ID"
+// // @Success 200 {object} models.Product
+// // @Failure 404 {object} models.ErrorResponse
+// // @Failure 500 {object} models.ErrorResponse
+// // @Router /products/{id} [get]
+// func (controller ProductController) GetProduct(c *gin.Context) {
+// 	// all user can access
+// 	db, err := utils.Connect()
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+// 		return
+// 	}
+// 	var product models.Product
+// 	if result := db.First(&product, c.Param("id")); result.Error != nil {
+// 		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Product not found"})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, product)
+// }
 
 // UpdateProduct updates an existing product
 // Only admin can update a product
@@ -263,4 +258,156 @@ func (controller ProductController) SearchProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, Product)
+}
+
+// GetProducts godoc
+// @Summary Get a list of products
+// @Description Get a list of products with pagination support
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param page query int false "Page number (default 1)"
+// @Param limit query int false "Number of items per page (default 10)"
+// @Success 200 {object} models.ProductsResponse
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products [get]
+func (controller ProductController) GetProducts(c *gin.Context) {
+	// all user can access
+	var response models.ProductsResponse
+
+	// Check if the data exists in Redis
+	page := c.DefaultQuery("page", "1")
+	limit := c.DefaultQuery("limit", "10")
+	cacheKey := fmt.Sprintf("products:%s:%s", page, limit)
+
+	// Initialize Redis client
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+
+	cachedData, err := redisClient.Get(cacheKey).Result()
+	if err == nil {
+		// Data exists in Redis
+		if err = json.Unmarshal([]byte(cachedData), &response); err != nil {
+			c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	// Data not found in Redis, query the database and cache the result
+	db, err := utils.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+	var products []models.Product
+
+	pageInt, err := utils.StringToInt(page)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "invalid page number"})
+		return
+	}
+
+	limitInt, err := utils.StringToInt(limit)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, models.ErrorResponse{Error: "invalid limit"})
+		return
+	}
+
+	offset := (pageInt - 1) * limitInt
+
+	if result := db.Offset(offset).Limit(limitInt).Find(&products); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
+		return
+	}
+
+	var total int64
+	if result := db.Model(&models.Product{}).Count(&total); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: result.Error.Error()})
+		return
+	}
+
+	response = models.ProductsResponse{
+		Data:  products,
+		Count: total,
+	}
+
+	// Cache the data
+	jsonData, err := json.Marshal(response)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+	if _, err = redisClient.Set(cacheKey, jsonData, time.Minute*5).Result(); err != nil {
+		log.Printf("Failed to cache data: %s\n", err.Error())
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+// GetProduct godoc
+// @Summary Get a product by ID
+// @Description Retrieve a product by ID
+// @Tags products
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "Bearer {token}"
+// @Param id path int true "Product ID"
+// @Success 200 {object} models.Product
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
+// @Router /products/{id} [get]
+func (controller ProductController) GetProduct(c *gin.Context) {
+	// Check if the data exists in Redis
+	cacheKey := fmt.Sprintf("product:%s", c.Param("id"))
+
+	// Initialize Redis client
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+
+	cachedData, err := redisClient.Get(cacheKey).Result()
+	if err == nil {
+		// Data exists in Redis
+		var product models.Product
+		if err = json.Unmarshal([]byte(cachedData), &product); err != nil {
+			c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, product)
+		return
+	}
+
+	// Data not found in Redis, query the database and cache the result
+	db, err := utils.Connect()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	var product models.Product
+	if result := db.First(&product, c.Param("id")); result.Error != nil {
+		c.JSON(http.StatusNotFound, models.ErrorResponse{Error: "Product not found"})
+		return
+	}
+
+	// Cache the data
+	jsonData, err := json.Marshal(product)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.ErrorResponse{Error: err.Error()})
+		return
+	}
+	if _, err = redisClient.Set(cacheKey, jsonData, time.Minute*5).Result(); err != nil {
+		log.Printf("Failed to cache data: %s\n", err.Error())
+	}
+
+	c.JSON(http.StatusOK, product)
 }
