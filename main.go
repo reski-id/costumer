@@ -78,6 +78,7 @@ func main() {
 	productController := controllers.ProductController{}
 	cartController := controllers.CartController{}
 	uploadController := controllers.UploadController{}
+	mailController := controllers.MailController{}
 
 	v1 := router.Group("/api/v1")
 
@@ -113,5 +114,9 @@ func main() {
 	v1.POST("/images", uploadController.UploadAsset)
 	v1.DELETE("/images/:id", uploadController.DeleteAsset)
 	v1.POST("/file", uploadController.UploadAssetUsingS3)
+
+	v1.POST("/email/single/:email", mailController.SendSingleEmail)
+	v1.POST("/email/batch", mailController.SendBatchEmail)
+
 	router.Run(":8080")
 }
